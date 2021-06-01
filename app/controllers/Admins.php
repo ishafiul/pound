@@ -441,6 +441,7 @@ class Admins extends Controller {
     public function Categories(){
         $info = $this->siteInfoModel->getSiteInfo();
         $category = $this->adminCategoryModel->getPrimaryCategory();
+        $categoryChild = $this->adminCategoryModel->getChildCategory();
         if (isset($_POST['categoryPAdd'])){
             $data = [
                 'page_title' => 'Categories',
@@ -449,7 +450,10 @@ class Admins extends Controller {
                 'categoryPName'=>$_POST['categoryPName'],
                 'cataddP_err'=>'',
                 'cataddP_Succ'=>'',
-                'primaryCategory'=>$category
+                'cataddC_err'=>'',
+                'cataddC_Succ'=>'',
+                'primaryCategory'=>$category,
+                'childCategory'=>$categoryChild,
             ];
             if (empty($data['categoryPName'])){
                 $data['cataddP_err']='Give Category A Name';
@@ -468,7 +472,10 @@ class Admins extends Controller {
                 'categoryPName'=>'',
                 'cataddP_err'=>'',
                 'cataddP_Succ'=>'',
+                'cataddC_err'=>'',
+                'cataddC_Succ'=>'',
                 'primaryCategory'=>$category,
+                'childCategory'=>$categoryChild,
                 'editPrimaryCatName'=>$_POST['editPrimaryCat'],
                 'editPrimaryCatId'=>$_POST['id']
             ];
@@ -489,12 +496,102 @@ class Admins extends Controller {
                 'categoryPName'=>'',
                 'cataddP_err'=>'',
                 'cataddP_Succ'=>'',
+                'cataddC_err'=>'',
+                'cataddC_Succ'=>'',
                 'primaryCategory'=>$category,
+                'childCategory'=>$categoryChild,
                 'editPrimaryCatId'=>$_POST['id']
             ];
 
                 $data['cataddP_Succ']='Primary Category Deleted Successfully';
                 $this->adminCategoryModel->deletePrimaryCategory($data);
+
+            $this->view('admin/category', $data);
+        }
+        //child
+        if (isset($_POST['categoryCAdd'])){
+            $data = [
+                'page_title' => 'Categories',
+                'description' => '',
+                'info'=>$info,
+                'categoryCName'=>$_POST['categoryCName'],
+                'childOf'=>$_POST['selectP'],
+                'categoryPName'=>'',
+                'cataddP_err'=>'',
+                'cataddP_Succ'=>'',
+                'cataddC_err'=>'',
+                'cataddC_select_err'=>'',
+                'cataddC_Succ'=>'',
+                'primaryCategory'=>$category,
+                'childCategory'=>$categoryChild,
+
+            ];
+            if ($data['childOf'] == 0){
+                $data['cataddC_select_err']='Select a Primary Category';
+            }
+            if(empty($data['categoryCName'])){
+                $data['cataddC_err']='Give Category A Name';
+            }
+            if (empty($data['cataddC_err']) && empty($data['cataddC_select_err'])){
+                $data['cataddC_Succ']='Primary Category Added Successfully';
+                $this->adminCategoryModel->addChildCategory($data);
+            }
+            $this->view('admin/category', $data);
+        }
+        if (isset($_POST['editChildCategory'])){
+            $data = [
+                'page_title' => 'Categories',
+                'description' => '',
+                'info'=>$info,
+                'categoryPName'=>'',
+                'cataddP_err'=>'',
+                'cataddP_Succ'=>'',
+                'cataddC_err'=>'',
+                'cataddC_select_err'=>'',
+                'cataddC_Succ'=>'',
+                'categoryCName'=>'',
+                'primaryCategory'=>$category,
+                'childCategory'=>$categoryChild,
+                'editChildCat'=>$_POST['editChildCat'],
+                'childOf'=>$_POST['selectPForEdit'],
+                'editChildCatId'=>$_POST['id']
+            ];
+            if ($data['childOf'] == 0){
+                $data['cataddC_select_err']='Select a Primary Category';
+            }
+            if(empty($data['editChildCat'])){
+                $data['cataddC_err']='Give Category A Name';
+            }
+            if (empty($data['cataddC_err']) && empty($data['cataddC_select_err'])){
+                $data['cataddC_Succ']='Primary Category Edited Successfully';
+                $this->adminCategoryModel->editChildCategory($data);
+            }
+
+            /*else{
+                $data['cataddP_Succ']='Primary Category Edited Successfully';
+                $this->adminCategoryModel->editPrimaryCategory($data);
+            }*/
+            $this->view('admin/category', $data);
+        }
+        if (isset($_POST['deleteChildCat'])){
+            $data = [
+                'page_title' => 'Categories',
+                'description' => '',
+                'info'=>$info,
+                'categoryPName'=>'',
+                'cataddP_err'=>'',
+                'cataddP_Succ'=>'',
+                'cataddC_err'=>'',
+                'cataddC_Succ'=>'',
+                'categoryCName'=>'',
+                'cataddC_select_err'=>'',
+                'primaryCategory'=>$category,
+                'childCategory'=>$categoryChild,
+                'editChildCatId'=>$_POST['id']
+            ];
+
+            $data['cataddC_Succ']='Child Category Deleted Successfully';
+            $this->adminCategoryModel->deleteChildCategory($data);
 
             $this->view('admin/category', $data);
         }
@@ -506,7 +603,12 @@ class Admins extends Controller {
                 'categoryPName'=>'',
                 'cataddP_err'=>'',
                 'cataddP_Succ'=>'',
-                'primaryCategory'=>$category
+                'cataddC_err'=>'',
+                'cataddC_Succ'=>'',
+                'categoryCName'=>'',
+                'cataddC_select_err'=>'',
+                'primaryCategory'=>$category,
+                'childCategory'=>$categoryChild,
             ];
             $this->view('admin/category', $data);
         }
