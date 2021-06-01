@@ -4,6 +4,82 @@ if (!isset($_SESSION['user_id'])){
 }
 require_once 'inc/header.php';
 ?>
+    <div class="row">
+        <div class="col-md-6">
+            <!---->
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Add Primary Category</h4>
+
+                    <form action="<?php echo URLROOT; ?>/admins/Categories" method="post">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Category Name</label>
+                            <br>
+                            <span class="text-danger"><?php echo $data['cataddP_err'];?></span>
+                            <span class="text-success"><?php echo $data['cataddP_Succ'];?></span>
+                            <input type="text" name="categoryPName" class="form-control <?php echo (!empty($data['cataddP_err'])) ? 'is-invalid' : ''; ?>" id="exampleInputPassword1" placeholder="" value="<?php echo $data['categoryPName']?>">
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" name="categoryPAdd" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                    <h4 class="card-title">All Primary Categories</h4>
+                    <hr>
+                    <?php
+                    foreach ($data['primaryCategory'] as $primary){
+                        ?>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4><?php echo $primary->name?></h4>
+                            </div>
+                            <div class="col-md-6">
+                                <form action="<?php echo URLROOT; ?>/admins/Categories" method="post">
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter<?php echo $primary->id?>"><i class="fas fa-edit"></i></button>
+
+                                    <input type="hidden" name="id" value="<?php echo $primary->id?>">
+                                    <button type="submit" name="deletePrimaryCat" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </div>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModalCenter<?php echo $primary->id?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Edit Category Name</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="<?php echo URLROOT; ?>/admins/Categories" method="post">
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Enter New Category Name</label>
+                                                    <input type="hidden" name="id" value="<?php echo $primary->id?>">
+                                                    <input type="text" name="editPrimaryCat" class="form-control" id="exampleInputPassword1" placeholder="" value="<?php echo $primary->name?>">
+                                                </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" name="editPrimaryCategory" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    <?php
+                    }
+                    ?>
+                </div>
+            </div>
+            <!---->
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
 <?php
 require_once 'inc/footer.php';
 ?>

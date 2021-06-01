@@ -4,6 +4,7 @@ class Admins extends Controller {
         $this->adminModel = $this->model('Admin');
         $this->sliderModel = $this->model('Slider');
         $this->siteInfoModel = $this->model('SiteInfo');
+        $this->adminCategoryModel = $this->model('AdminCategory');
     }
 
     public function index(){// function name will define what will be the page url that user will input
@@ -437,14 +438,77 @@ class Admins extends Controller {
             $this->view('admin/site_settings',$data);
         }
     }
-    public function Categorys(){
+    public function Categories(){
         $info = $this->siteInfoModel->getSiteInfo();
-        $data = [
-            'page_title' => 'Contacts Us',
-            'description' => '',
-            'info'=>$info
-        ];
+        $category = $this->adminCategoryModel->getPrimaryCategory();
+        if (isset($_POST['categoryPAdd'])){
+            $data = [
+                'page_title' => 'Categories',
+                'description' => '',
+                'info'=>$info,
+                'categoryPName'=>$_POST['categoryPName'],
+                'cataddP_err'=>'',
+                'cataddP_Succ'=>'',
+                'primaryCategory'=>$category
+            ];
+            if (empty($data['categoryPName'])){
+                $data['cataddP_err']='Give Category A Name';
+            }
+            else{
+                $data['cataddP_Succ']='Primary Category Added Successfully';
+                $this->adminCategoryModel->addPrimaryCategory($data);
+            }
+           $this->view('admin/category', $data);
+        }
+        if (isset($_POST['editPrimaryCategory'])){
+            $data = [
+                'page_title' => 'Categories',
+                'description' => '',
+                'info'=>$info,
+                'categoryPName'=>'',
+                'cataddP_err'=>'',
+                'cataddP_Succ'=>'',
+                'primaryCategory'=>$category,
+                'editPrimaryCatName'=>$_POST['editPrimaryCat'],
+                'editPrimaryCatId'=>$_POST['id']
+            ];
+            if (empty($data['editPrimaryCatName'])){
+                $data['cataddP_err']='Give Category A Name For Edit';
+            }
+            else{
+                $data['cataddP_Succ']='Primary Category Edited Successfully';
+                $this->adminCategoryModel->editPrimaryCategory($data);
+            }
+            $this->view('admin/category', $data);
+        }
+        if (isset($_POST['deletePrimaryCat'])){
+            $data = [
+                'page_title' => 'Categories',
+                'description' => '',
+                'info'=>$info,
+                'categoryPName'=>'',
+                'cataddP_err'=>'',
+                'cataddP_Succ'=>'',
+                'primaryCategory'=>$category,
+                'editPrimaryCatId'=>$_POST['id']
+            ];
 
-        $this->view('admin/category', $data);
+                $data['cataddP_Succ']='Primary Category Deleted Successfully';
+                $this->adminCategoryModel->deletePrimaryCategory($data);
+
+            $this->view('admin/category', $data);
+        }
+        else{
+            $data = [
+                'page_title' => 'Categories',
+                'description' => '',
+                'info'=>$info,
+                'categoryPName'=>'',
+                'cataddP_err'=>'',
+                'cataddP_Succ'=>'',
+                'primaryCategory'=>$category
+            ];
+            $this->view('admin/category', $data);
+        }
     }
 }
