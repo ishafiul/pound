@@ -5,6 +5,7 @@ class Admins extends Controller {
         $this->sliderModel = $this->model('Slider');
         $this->siteInfoModel = $this->model('SiteInfo');
         $this->adminCategoryModel = $this->model('AdminCategory');
+        $this->brandsModel = $this->model('Brands');
     }
 
     public function index(){// function name will define what will be the page url that user will input
@@ -611,6 +612,98 @@ class Admins extends Controller {
                 'childCategory'=>$categoryChild,
             ];
             $this->view('admin/category', $data);
+        }
+    }
+
+    public function brands(){
+        $info = $this->siteInfoModel->getSiteInfo();
+        $category = $this->adminCategoryModel->getPrimaryCategory();
+        $brands= $this->brandsModel->getBrands();
+        if (isset($_POST['addBrand'])){
+            $data = [
+                'page_title' => 'Brands',
+                'description' => '',
+                'info'=>$info,
+                'primaryCategory'=>$category,
+                'brand_Name_err'=>'',
+                'brand_succ'=>'',
+                'cat_select_err'=>'',
+                'brands'=>$brands,
+                'brand_name'=>$_POST['brandName'],
+                'cat_id'=>$_POST['selectCat']
+            ];
+            if ($data['cat_id'] == 0){
+                $data['cat_select_err']='Select a Primary Category';
+            }
+            if(empty($data['brand_name'])){
+                $data['brand_Name_err']='Give a Brand name';
+            }
+            if (empty($data['cat_select_err']) && empty($data['brand_Name_err'])){
+                $data['brand_succ']='Brand Added Successfully';
+                $this->brandsModel->addBrands($data);
+            }
+            $this->view('admin/brands',$data);
+        }
+        if (isset($_POST['deletebrand'])){
+            $data = [
+                'page_title' => 'Brands',
+                'description' => '',
+                'info'=>$info,
+                'primaryCategory'=>$category,
+                'brands'=>$brands,
+                'brand_Name_err'=>'',
+                'brand_succ'=>'',
+                'cat_select_err'=>'',
+                'brand_name'=>'',
+                'id'=>$_POST['id'],
+            ];
+
+            $data['brand_succ']='Brand Deleted Successfully';
+            $this->brandsModel->deleteBrand($data);
+
+            $this->view('admin/brands', $data);
+        }
+        if (isset($_POST['editBrands'])){
+            $data = [
+                'page_title' => 'Brands',
+                'description' => '',
+                'info'=>$info,
+                'primaryCategory'=>$category,
+                'brands'=>$brands,
+                'brand_Name_err'=>'',
+                'brand_succ'=>'',
+                'cat_select_err'=>'',
+                'id'=>$_POST['editid'],
+                'brand_name'=>$_POST['editBrandName'],
+                'cat_id'=>$_POST['selectEditCat']
+            ];
+
+            if ($data['cat_id'] == 0){
+                $data['cat_select_err']='Select a Primary Category';
+            }
+            if(empty($data['brand_name'])){
+                $data['brand_Name_err']='Give a Brand name';
+            }
+            if (empty($data['cat_select_err']) && empty($data['brand_Name_err'])){
+                $data['brand_succ']='Brand Added Successfully';
+                $this->brandsModel->editBrands($data);
+            }
+
+            $this->view('admin/brands', $data);
+        }
+        else{
+            $data = [
+                'page_title' => 'Brands',
+                'description' => '',
+                'info'=>$info,
+                'primaryCategory'=>$category,
+                'brands'=>$brands,
+                'brand_Name_err'=>'',
+                'brand_succ'=>'',
+                'cat_select_err'=>'',
+                'brand_name'=>'',
+            ];
+            $this->view('admin/brands',$data);
         }
     }
 }
