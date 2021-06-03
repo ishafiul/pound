@@ -16,7 +16,7 @@
     <link href='http://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="<?php echo URLROOT; ?>/js/jquery-1.11.1.min.js"></script>
     <!-- start menu -->
-    <link href="css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="<?php echo URLROOT; ?>/css/megamenu.css" rel="stylesheet" type="text/css" media="all" />
     <script type="text/javascript" src="<?php echo URLROOT; ?>/js/megamenu.js"></script>
     <script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
 </head>

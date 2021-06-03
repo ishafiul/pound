@@ -4,6 +4,7 @@
      //your models gose here . example : $this->ModelName = $this->model('model_class_name');
         $this->sliderModel = $this->model('Slider');
         $this->siteInfoModel = $this->model('SiteInfo');
+        $this->officeModel = $this->model('Office');
     }
     
     public function index(){// function name will define what will be the page url that user will input
@@ -30,10 +31,12 @@
     }
       public function contact(){
           $info = $this->siteInfoModel->getSiteInfo();
+          $office = $this->officeModel->getAllOfficeInfo();
           $data = [
               'page_title' => 'Contacts Us',
               'description' => '',
-              'info'=>$info
+              'info'=>$info,
+              'office'=>$office
           ];
 
           $this->view('pages/contact', $data);
