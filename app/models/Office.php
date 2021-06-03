@@ -39,4 +39,13 @@ class Office
             return false;
         }
     }
+    public function deleteOffice($data){
+        $this->db->query("DELETE FROM office WHERE id=:id");
+        $this->db->bind(':id',$data['id']);
+        if($this->db->execute()){
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

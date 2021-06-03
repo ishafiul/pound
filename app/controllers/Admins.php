@@ -782,6 +782,30 @@ class Admins extends Controller {
             }
             $this->view('admin/office',$data);
         }
+        if (isset($_POST['deleteOffice'])){
+            $data = [
+                'page_title' => 'Office',
+                'description' => '',
+                'info'=>$info,
+                'office'=>$office,
+                'address'=>'',
+                'mobile'=>'',
+                'telephone'=>'',
+                'fax'=>'',
+                'email'=>'',
+                'office_succ'=>'',
+                'address_err'=>'',
+                'mobile_err'=>'',
+                'telephone_err'=>'',
+                'fax_err'=>'',
+                'email_err'=>'',
+                'id'=>$_POST['id'],
+            ];
+            if ($this->officeModel->deleteOffice($data)){
+                $data['office_succ']='Office Deleted Successfully';
+            }
+            $this->view('admin/office',$data);
+        }
         else{
             $data = [
                 'page_title' => 'Office',

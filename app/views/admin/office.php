@@ -70,7 +70,7 @@ require_once 'inc/header.php';
                                 <td> <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter<?php echo $office->id?>"><i class="fas fa-edit"></i></button>
 
                                     <input type="hidden" name="id" value="<?php echo $office->id?>">
-                                    <button type="submit" name="deletebrand" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
+                                    <button type="submit" name="deleteOffice" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
                             </tr>
                             <div class="modal fade" id="exampleModalCenter<?php echo $office->id?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
