@@ -6,6 +6,7 @@ class Admins extends Controller {
         $this->siteInfoModel = $this->model('SiteInfo');
         $this->adminCategoryModel = $this->model('AdminCategory');
         $this->brandsModel = $this->model('Brands');
+        $this->officeModel = $this->model('Office');
     }
 
     public function index(){// function name will define what will be the page url that user will input
@@ -705,5 +706,102 @@ class Admins extends Controller {
             ];
             $this->view('admin/brands',$data);
         }
+    }
+    public function office(){
+        $info = $this->siteInfoModel->getSiteInfo();
+        $office = $this->officeModel->getAllOfficeInfo();
+        if (isset($_POST['addOffice'])){
+            $data = [
+                'page_title' => 'Office',
+                'description' => '',
+                'info'=>$info,
+                'office'=>$office,
+                'address'=>$_POST['address'],
+                'mobile'=>$_POST['mobile'],
+                'telephone'=>$_POST['telephone'],
+                'fax'=>$_POST['fax'],
+                'email'=>$_POST['email'],
+                'office_succ'=>'',
+                'address_err'=>'',
+                'mobile_err'=>'',
+                'telephone_err'=>'',
+                'fax_err'=>'',
+                'email_err'=>'',
+            ];
+
+            if (empty($data['address'])){
+                $data['address_err']='Insert Address';
+            }
+            if(empty($data['mobile'])){
+                $data['mobile_err']='Insert Mobile Number';
+            }
+            if(empty($data['telephone'])){
+                $data['telephone_err']='Insert Telephone Number';
+            }
+            if(empty($data['fax'])){
+                $data['fax_err']='Insert FAX Number';
+            }
+            if(empty($data['email'])){
+                $data['email_err']='Insert Email';
+            }
+            if (empty($data['address_err']) && empty($data['mobile_err']) && empty($data['telephone_err']) && empty($data['fax_err']) && empty($data['email_err'])){
+                $data['office_succ']='Office Added Successfully';
+                $this->officeModel->addOffice($data);
+            }
+            else{
+
+            }
+            $this->view('admin/office',$data);
+        }
+        if (isset($_POST['editOffice'])){
+            $data = [
+                'page_title' => 'Office',
+                'description' => '',
+                'info'=>$info,
+                'office'=>$office,
+                'editaddress'=>$_POST['editaddress'],
+                'editmobile'=>$_POST['editmobile'],
+                'edittelephone'=>$_POST['edittelephone'],
+                'editfax'=>$_POST['editfax'],
+                'editemail'=>$_POST['editemail'],
+                'address'=>'',
+                'mobile'=>'',
+                'telephone'=>'',
+                'fax'=>'',
+                'email'=>'',
+                'id'=>$_POST['id'],
+                'office_succ'=>'',
+                'address_err'=>'',
+                'mobile_err'=>'',
+                'telephone_err'=>'',
+                'fax_err'=>'',
+                'email_err'=>'',
+            ];
+            if ($this->officeModel->editOffice($data)){
+                $data['office_succ']='Office Edited Successfully';
+            }
+            $this->view('admin/office',$data);
+        }
+        else{
+            $data = [
+                'page_title' => 'Office',
+                'description' => '',
+                'info'=>$info,
+                'office'=>$office,
+                'address'=>'',
+                'mobile'=>'',
+                'telephone'=>'',
+                'fax'=>'',
+                'email'=>'',
+                'office_succ'=>'',
+                'address_err'=>'',
+                'mobile_err'=>'',
+                'telephone_err'=>'',
+                'fax_err'=>'',
+                'email_err'=>'',
+            ];
+            $this->view('admin/office',$data);
+        }
+
     }
 }
