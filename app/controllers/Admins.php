@@ -4,7 +4,7 @@ class Admins extends Controller {
         $this->adminModel = $this->model('Admin');
         $this->sliderModel = $this->model('Slider');
         $this->siteInfoModel = $this->model('SiteInfo');
-        $this->adminCategoryModel = $this->model('AdminCategory');
+        $this->adminCategoryModel = $this->model('Category');
         $this->brandsModel = $this->model('Brands');
         $this->officeModel = $this->model('Office');
     }
@@ -454,6 +454,8 @@ class Admins extends Controller {
                 'cataddP_Succ'=>'',
                 'cataddC_err'=>'',
                 'cataddC_Succ'=>'',
+                'categoryCName'=>'',
+                'cataddC_select_err'=>'',
                 'primaryCategory'=>$category,
                 'childCategory'=>$categoryChild,
             ];
@@ -476,6 +478,8 @@ class Admins extends Controller {
                 'cataddP_Succ'=>'',
                 'cataddC_err'=>'',
                 'cataddC_Succ'=>'',
+                'cataddC_select_err'=>'',
+                'categoryCName'=>'',
                 'primaryCategory'=>$category,
                 'childCategory'=>$categoryChild,
                 'editPrimaryCatName'=>$_POST['editPrimaryCat'],
@@ -500,6 +504,8 @@ class Admins extends Controller {
                 'cataddP_Succ'=>'',
                 'cataddC_err'=>'',
                 'cataddC_Succ'=>'',
+                'categoryCName'=>'',
+                'cataddC_select_err'=>'',
                 'primaryCategory'=>$category,
                 'childCategory'=>$categoryChild,
                 'editPrimaryCatId'=>$_POST['id']
@@ -524,6 +530,7 @@ class Admins extends Controller {
                 'cataddC_err'=>'',
                 'cataddC_select_err'=>'',
                 'cataddC_Succ'=>'',
+                'categoryCName'=>'',
                 'primaryCategory'=>$category,
                 'childCategory'=>$categoryChild,
 

@@ -1,5 +1,5 @@
 <?php
-class AdminCategory
+class Category
 {
     private $db;
 
