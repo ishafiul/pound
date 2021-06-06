@@ -12,7 +12,7 @@ class Admins extends Controller {
     public function index(){// function name will define what will be the page url that user will input
         $info = $this->siteInfoModel->getSiteInfo();
         $data = [
-            'page_title' => 'BlogMVC',
+            'page_title' => 'Admin Dash',
             'description' => '',
             'info'=>$info
         ];
@@ -92,15 +92,15 @@ class Admins extends Controller {
         }
     }
     public function createUserSession($user){
-        $_SESSION['user_id'] = $user->id;
-        $_SESSION['user_email'] = $user->email;
-        $_SESSION['user_name'] = $user->name;
-        $_SESSION['user_type'] = $user->type;
+      $_SESSION['user_id'] = $user->id;
+        $_SESSION['user_name'] = $user->username;
+        //$_SESSION['user_name'] = $user->name;
+        //$_SESSION['user_type'] = $user->type;
         redirect('admins');
     }
     public function logout(){
         unset($_SESSION['user_id']);
-        unset($_SESSION['user_email']);
+        //unset($_SESSION['user_email']);
         unset($_SESSION['user_name']);
         session_destroy();
         redirect('admins/login');
@@ -834,5 +834,15 @@ class Admins extends Controller {
             $this->view('admin/office',$data);
         }
 
+    }
+    public function products(){
+        $info = $this->siteInfoModel->getSiteInfo();
+        $data = [
+            'page_title' => 'Product',
+            'description' => '',
+            'info'=>$info
+        ];
+
+        $this->view('admin/product', $data);
     }
 }
