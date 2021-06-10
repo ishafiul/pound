@@ -61,4 +61,7 @@ function pagination($total_pages,$pageno){
     $html.='</ul></nav>';
     echo $html;
 }
+function uploadMultipleImg($data){
+
+}
 ?>

@@ -75,7 +75,7 @@
         <div class="clearfix"></div>
     </div>
     <div class="copy">
-        <p>© 2015 All Rights Reseverd Template by <a href="http://w3layouts.com/">W3layouts</a> </p>
+        <p>© 2015 All Rights Reseverd by <?php echo $data['info'][0]->title?> </p>
     </div>
 </div>
 </div>

@@ -11,6 +11,7 @@ class Admins extends Controller
         $this->brandsModel = $this->model('Brands');
         $this->officeModel = $this->model('Office');
         $this->productModel = $this->model('Products');
+        $this->imgModel = $this->model('Image');
     }
 
     public function index()
@@ -836,21 +837,418 @@ class Admins extends Controller
         } else {
             $pageno = 1;
         }
-        $no_of_records_per_page = 25;
+        $no_of_records_per_page = 10;
         $offset = ($pageno - 1) * $no_of_records_per_page;
         $total_rows = $this->productModel->getTotalRow();
         $total_pages = ceil($total_rows[0]->total_row / $no_of_records_per_page);
         $products = $this->productModel->getPagination($offset, $no_of_records_per_page);
+
+        $topFeatured = $this->productModel->getTopF();
+        $bottomFeatured = $this->productModel->getBottomF();
+        $categoryChild = $this->adminCategoryModel->getChildCategory();
+        $brands = $this->brandsModel->getBrands();
         $data = [
             'page_title' => 'Products',
             'description' => '',
             'info' => $info,
             'products' => $products,
             'total_pages' =>$total_pages,
-            'pageno'=>$pageno
-        ];
+            'pageno'=>$pageno,
+            'top_featured'=>$topFeatured,
+            'bottom_featured'=>$bottomFeatured,
+            'childCategory' => $categoryChild,
+            'brands'=>$brands,
+            'upload_img'=>'',
+            'name'=>'',
+            'price'=>'',
+            'short_info'=>'',
+            'details'=>'',
+            'more_info'=>'',
+            'category'=>'',
+            'brand'=>'',
+            'upload_img_err'=>'',
+            'name_err'=>'',
+            'price_err'=>'',
+            'short_info_err'=>'',
+            'details_err'=>'',
+            'more_info_err'=>'',
+            'category_err'=>'',
+            'brand_err'=>'',
+            'product_succ'=>''
 
+        ];
+        if (isset($_POST['addProduct'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'total_pages' =>$total_pages,
+                'pageno'=>$pageno,
+                'top_featured'=>$topFeatured,
+                'bottom_featured'=>$bottomFeatured,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'upload_img'=>$_FILES['productImg']['name'],
+                'name'=>$_POST['name'],
+                'price'=>$_POST['price'],
+                'short_info'=>$_POST['short_info'],
+                'details'=>$_POST['details'],
+                'more_info'=>$_POST['more_info'],
+                'category'=>$_POST['category'],
+                'brand'=>$_POST['brand'],
+                'upload_img_err'=>'',
+                'name_err'=>'',
+                'price_err'=>'',
+                'short_info_err'=>'',
+                'details_err'=>'',
+                'more_info_err'=>'',
+                'category_err'=>'',
+                'brand_err'=>'',
+                'url'=>'',
+                'product_succ'=>''
+            ];
+            if(empty($_FILES['productImg']['name'][0])){
+                $data['upload_img_err'] = "Please Select Image";
+            }
+            if(empty($_POST['name'])){
+                $data['name_err'] = "Insert Product Name";
+            }
+            if(empty($_POST['price'])){
+                $data['price_err'] = "Insert Product Price";
+            }
+            if($_POST['category'] == 0){
+                $data['category_err'] = "Select a Category";
+            }
+            if($_POST['brand'] == 0){
+                $data['brand_err'] = "Select a Brand";
+            }
+            if (empty($data['upload_img_err']) && empty($data['name_err']) && empty($data['price_err']) && empty($data['category_err']) && empty($data['brand_err'])){
+
+                $rand=rand('11111111','99999999');
+                $url =$data['name'].'_'.$rand;
+                $url = str_replace(" ", "_", $url);
+                $data['url'] =$url;
+                $id = $this->productModel->addProduct($data);
+                foreach($data['upload_img'] as $key=>$val) {
+                    $rand=rand('11111111','99999999');
+                    $file=$rand.'_'.$val;
+                    $file_temp = $_FILES['productImg']['tmp_name'][$key];
+                    $uploaded_image = DOCROOT . "/public/img/product/" . $file;
+                    move_uploaded_file($file_temp,$uploaded_image);
+                    $this->imgModel->addImg($file,$id);
+
+                }
+                $data['product_succ'] = "Product Added Successfully. please reload the page";
+            }
+
+        }
+        if (isset($_POST['deleteProduct'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'total_pages' =>$total_pages,
+                'pageno'=>$pageno,
+                'top_featured'=>$topFeatured,
+                'bottom_featured'=>$bottomFeatured,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'upload_img'=>'',
+                'name'=>'',
+                'price'=>'',
+                'short_info'=>'',
+                'details'=>'',
+                'more_info'=>'',
+                'category'=>'',
+                'brand'=>'',
+                'upload_img_err'=>'',
+                'name_err'=>'',
+                'price_err'=>'',
+                'short_info_err'=>'',
+                'details_err'=>'',
+                'more_info_err'=>'',
+                'category_err'=>'',
+                'brand_err'=>'',
+                'id'=>$_POST['id'],
+                'product_succ'=>''
+
+            ];
+            $img = $this->imgModel->getImgByProductId($products);
+            foreach ($img as $img){
+                $path = DOCROOT . "/public/img/product/" . $img->img;
+                unlink($path);
+            }
+            $this->productModel->deleteproduct($data['id']);
+            $data['product_succ'] = "Deleted Successfully please reload the page";
+            $this->view('admin/product', $data);
+        }
+        if (isset($_POST['addTopF'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'total_pages' =>$total_pages,
+                'pageno'=>$pageno,
+                'top_featured'=>$topFeatured,
+                'bottom_featured'=>$bottomFeatured,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'upload_img'=>'',
+                'name'=>'',
+                'price'=>'',
+                'short_info'=>'',
+                'details'=>'',
+                'more_info'=>'',
+                'category'=>'',
+                'brand'=>'',
+                'upload_img_err'=>'',
+                'name_err'=>'',
+                'price_err'=>'',
+                'short_info_err'=>'',
+                'details_err'=>'',
+                'more_info_err'=>'',
+                'category_err'=>'',
+                'brand_err'=>'',
+                'product_succ'=>'',
+                'id'=>$_POST['id']
+            ];
+            $data['product_succ'] = "Added Top Featured Successfully please reload the page";
+            $this->productModel->addTopF($data['id']);
+        }
+        if (isset($_POST['removeTopF'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'total_pages' =>$total_pages,
+                'pageno'=>$pageno,
+                'top_featured'=>$topFeatured,
+                'bottom_featured'=>$bottomFeatured,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'upload_img'=>'',
+                'name'=>'',
+                'price'=>'',
+                'short_info'=>'',
+                'details'=>'',
+                'more_info'=>'',
+                'category'=>'',
+                'brand'=>'',
+                'upload_img_err'=>'',
+                'name_err'=>'',
+                'price_err'=>'',
+                'short_info_err'=>'',
+                'details_err'=>'',
+                'more_info_err'=>'',
+                'category_err'=>'',
+                'brand_err'=>'',
+                'product_succ'=>'',
+                'id'=>$_POST['id']
+            ];
+            $data['product_succ'] = "Removed Top Featured Successfully please reload the page";
+            $this->productModel->removeTopF($data['id']);
+        }
+        if (isset($_POST['addBottomF'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'total_pages' =>$total_pages,
+                'pageno'=>$pageno,
+                'top_featured'=>$topFeatured,
+                'bottom_featured'=>$bottomFeatured,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'upload_img'=>'',
+                'name'=>'',
+                'price'=>'',
+                'short_info'=>'',
+                'details'=>'',
+                'more_info'=>'',
+                'category'=>'',
+                'brand'=>'',
+                'upload_img_err'=>'',
+                'name_err'=>'',
+                'price_err'=>'',
+                'short_info_err'=>'',
+                'details_err'=>'',
+                'more_info_err'=>'',
+                'category_err'=>'',
+                'brand_err'=>'',
+                'product_succ'=>'',
+                'id'=>$_POST['id']
+            ];
+            $data['product_succ'] = "Added Bottom Featured Successfully please reload the page";
+            $this->productModel->addBottomF($data['id']);
+        }
+        if (isset($_POST['removeBottomF'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'total_pages' =>$total_pages,
+                'pageno'=>$pageno,
+                'top_featured'=>$topFeatured,
+                'bottom_featured'=>$bottomFeatured,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'upload_img'=>'',
+                'name'=>'',
+                'price'=>'',
+                'short_info'=>'',
+                'details'=>'',
+                'more_info'=>'',
+                'category'=>'',
+                'brand'=>'',
+                'upload_img_err'=>'',
+                'name_err'=>'',
+                'price_err'=>'',
+                'short_info_err'=>'',
+                'details_err'=>'',
+                'more_info_err'=>'',
+                'category_err'=>'',
+                'brand_err'=>'',
+                'product_succ'=>'',
+                'id'=>$_POST['id']
+            ];
+            $data['product_succ'] = "Removed Bottom Featured Successfully please reload the page";
+            $this->productModel->removeBottomF($data['id']);
+        }
         $this->view('admin/product', $data);
+    }
+    public function editproduct($Url){
+        $info = $this->siteInfoModel->getSiteInfo();
+        $categoryChild = $this->adminCategoryModel->getChildCategory();
+        $brands = $this->brandsModel->getBrands();
+        $products = $this->productModel->getProductByUrl($Url);
+        $img= $this->imgModel->getImgByProductId($products);
+        if (isset($_POST['editProduct'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'img'=>$img,
+                'upload_img'=>$_FILES['productImg']['name'],
+                'name'=>$_POST['name'],
+                'price'=>$_POST['price'],
+                'short_info'=>$_POST['short_info'],
+                'details'=>$_POST['details'],
+                'more_info'=>$_POST['more_info'],
+                'category'=>$_POST['category'],
+                'brand'=>$_POST['brand'],
+                'id'=>'',
+                'product_succ'=>''
+            ];
+            $id = $data['products'][0]->id;
+            $data['id']=$id;
+            if(!empty($_FILES['productImg']['name'][0])){
+                foreach($data['upload_img'] as $key=>$val) {
+                    $rand=rand('11111111','99999999');
+                    $file=$rand.'_'.$val;
+                    $file_temp = $_FILES['productImg']['tmp_name'][$key];
+                    $uploaded_image = DOCROOT . "/public/img/product/" . $file;
+                    move_uploaded_file($file_temp,$uploaded_image);
+                    $this->imgModel->addImg($file,$id);
+
+                }
+            }
+            $this->productModel->updateProduct($data);
+            $data['product_succ'] = "Product Edited Successfully. please reload the page";
+            $this->view('admin/editproduct', $data);
+        }
+        if (isset($_POST['deleteImg'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'img'=>$img,
+                'product_succ'=>'',
+                'id'=>$_POST['imgId'],
+                'imgName'=>$_POST['imgName'],
+            ];
+            $path = DOCROOT . "/public/img/product/" . $data['imgName'];
+            if (file_exists ( $path)){
+                unlink($path);
+            }
+            $this->imgModel->deleteImg($data['id']);
+            $data['product_succ'] = "Product Edited Successfully. please reload the page";
+            $this->view('admin/editproduct', $data);
+        }
+        if (isset($_POST['editImg'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'img'=>$img,
+                'product_succ'=>'',
+                'img_err'=>''
+
+            ];
+            //$data['product_succ'] = $_FILES['img']['name'];
+            $file_name = $_FILES['img']['name'];
+            $file_size = $_FILES['img']['size'];
+            $img = $_POST['imgName'];
+            $permited = array('jpg', 'jpeg', 'png', 'gif');
+            $data['product_succ'] = $img;
+            $div = explode('.', $file_name);
+            $ext = strtolower(end($div));
+            if (empty($_FILES['img']['name'])) {
+                $data['img_err'] = 'Select file';
+            } elseif ($file_size > 2048567) {
+                $data['img_err'] = 'Image Size Should be Less Then 2MB';
+            } elseif (in_array($ext, $permited) === false) {
+                $data['img_err'] = "You can upload only: " . implode(', ', $permited);
+            } else {
+                $file_temp = $_FILES['img']['tmp_name'];
+                $unique_image = substr(md5(time()), 0, 10) . '.' . $ext;
+                $uploaded_image = DOCROOT . "/public/img/product/" . $unique_image;
+                move_uploaded_file($file_temp, $uploaded_image);
+                $id = $_POST['imgId'];
+                    $oldImg = DOCROOT . "/public/img/product/" . $img;
+                    if (file_exists($oldImg)) {
+
+                        unlink($oldImg);
+                    }
+                    $this->imgModel->editImg($unique_image,$id);
+                    //print_r($info);
+                    redirect('admins/products');
+                    //$data['product_succ'] = "Image Edited Successfully. Please Reload";
+
+            }
+            //$this->view('admin/editproduct', $data);
+
+        }
+        else{
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'img'=>$img,
+                'product_succ'=>''
+            ];
+
+            $this->view('admin/editproduct', $data);
+        }
+
+
     }
 
 
