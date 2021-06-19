@@ -1,5 +1,5 @@
 <?php
-if (!isset($_SESSION['user_id'])){
+if (!isset($_SESSION['user_name_admin'])){
     redirect('admins/login');
 }
 require_once 'inc/header.php';
@@ -222,10 +222,21 @@ require_once 'inc/header.php';
                                 <td><?php echo $products->brand_name?></td>
                                 <td>$<?php echo $products->price?></td>
                                 <td>
-                                    <button type="button" class="btn btn-success">Add to Home</button>
+                                    <?php if ($products->add_to_home == 0){
+                                    ?>
+                                    <button type="submit" name="addToHome" class="btn btn-success">Add to Home</button>
+                                        <?php
+
+                                    }
+                                    else{
+                                       ?>
+                                        <button type="submit" name="removeFromHome" class="btn btn-warning">Remove From Home</button>
+                                    <?php
+                                    }
+                                    ?>
                                     <br>
                                     <br>
-                                    <?php if (!$data['top_featured']){
+                                    <?php if (!$data['top_featured'] && $products->add_to_home == 0){
                                         ?>
                                         <button name="addTopF" type="submit" class="btn btn-primary">Top Featured</button>
                                         <br>
@@ -234,7 +245,7 @@ require_once 'inc/header.php';
 
                                     }
                                     ?>
-                                    <?php if (!$data['bottom_featured']){
+                                    <?php if (!$data['bottom_featured'] && $products->add_to_home == 0){
                                         ?>
                                         <button type="submit" name="addBottomF" class="btn btn-primary">Bottom Featured </button>
                                         <?php

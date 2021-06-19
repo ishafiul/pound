@@ -7,15 +7,20 @@ require APPROOT . '/views/inc/navbar.php';
                 <div class="men">
                     <div class="account-in">
                         <h2>Account</h2>
+                        <?php flash('register_success');
+                        ?>
+                        <br>
                         <div class="col-md-7 account-top">
-                            <form>
+                            <form class="user" action="<?php echo URLROOT; ?>/login" method="post">
                                 <div>
                                     <span>Email*</span>
-                                    <input type="text">
+                                    <input type="text" name="username" value="<?php echo $data['username'];?>">
+                                    <span style="color: red"><?php echo $data['username_err'];?></span>
                                 </div>
                                 <div>
                                     <span class="pass">Password*</span>
-                                    <input type="password">
+                                    <input type="password" name="password" value="<?php echo $data['password'];?>">
+                                    <span style="color: red"><?php echo $data['password_err'];?></span>
                                 </div>
                                 <input type="submit" value="Login">
                             </form>

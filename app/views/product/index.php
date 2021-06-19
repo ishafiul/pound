@@ -31,8 +31,10 @@ require APPROOT . '/views/inc/navbar.php';
                                 <h1><?php echo $data['products'][0]->product_name?></h1>
                                 <p class="m_5">Rs. <?php echo $data['products'][0]->price?></p>
                                 <div class="btn_form">
-                                    <form>
-                                        <input type="submit" value="buy" title="">
+                                    <form action="<?php echo URLROOT; ?>/product/<?php echo $data['products'][0]->url?>" method="post">
+                                        <input type="hidden" name="id" value="<?php echo $data['products'][0]->id?>">
+                                        <input type="hidden" name="url" value="<?php echo $data['products'][0]->url?>">
+                                        <input type="submit" value="Add To Cart"  name="addToCart">
                                     </form>
                                 </div>
                                 <p class="m_text2"><?php echo $data['products'][0]->short_info?></p>

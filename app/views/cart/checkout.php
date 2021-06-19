@@ -20,6 +20,7 @@ require APPROOT . '/views/inc/navbar.php';
         ?>
         <br>
         <br>
+        <form action="<?php echo URLROOT; ?>/public/payment/charge.php" method="post">
        <div class="row">
            <div class="col-md-6">
 
@@ -27,28 +28,29 @@ require APPROOT . '/views/inc/navbar.php';
                    <h1>Shipping Address </h1>
                    <div>
                        <span>First Name<label>*</label></span>
-                       <input type="text" name="fname" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->fname;}?>">
+                       <input type="text" name="fname" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->fname;}?>" required>
                    </div>
                    <div>
                        <span>Last Name<label>*</label></span>
-                       <input type="text" name="l_name" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->lname;}?>">
+                       <input type="text" name="l_name" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->lname;}?>" required>
                    </div>
                    <div>
                        <span>Email Address<label>*</label></span>
-                       <input type="email" name="mail" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->email;}?>">
+                       <input type="email" name="mail" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->email;}?>" required>
                    </div>
                    <div>
                        <span>Phone Number<label>*</label></span>
-                       <input type="text" name="phone" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->phone;}?>">
+                       <input type="text" name="phone" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->phone;}?>" required>
 
                    </div>
                    <div>
                        <span>Zip Code<label>*</label></span>
-                       <input type="text" name="zip" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->zip;}?>">
+                       <input type="text" name="zip" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->zip;}?>" required>
                    </div>
                    <div>
                        <span>Address<label>*</label></span>
-                       <input type="text" name="address" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->address;}?>">
+                       <input type="text" name="address" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->address;}?>" required>
+                       <input type="hidden" name="user_id" value="<?php if (!empty($data['user_info'])){ echo $data['user_info'][0]->id;}?>">
                    </div>
                    <div class="clearfix"> </div>
                    <a class="news-letter" href="#">
@@ -69,28 +71,37 @@ require APPROOT . '/views/inc/navbar.php';
                    <tbody>
                    <?php
                    $totalPrice = 0;
+                   $arr =[];
                    foreach ($data['cart'] as $cart){
                        ?>
                        <tr>
-                           <td><img src="http://localhost/pound/img/product/47847228_pic2.png" alt="" width="100px"></td>
+                           <td><img src="<?php echo URLROOT; ?>/img/product/<?php echo $cart->product_base_img?>" alt="" width="100px"></td>
                            <td><?php echo $cart->product_name?></td>
                            <td>$<?php echo $cart->price?></td>
                        </tr>
                        <?php
                        $totalPrice += intval($cart->price);
+                       $arr[] .=$cart->id;
                    }
+                   //print_r($productIds) ;
+                   $productId = implode(",",$arr);
                    ?>
 
                    </tbody>
                </table>
                <div>
-                   <h2>Total: $<?php echo $totalPrice?></h2>
-                   <button type="button" class="btn btn-danger">Pay Now!</button>
+
+                       <h2>Total: $<?php echo $totalPrice?></h2>
+                       <input type="hidden" value="<?php echo $totalPrice?>" name="amount">
+                       <input type="hidden" value="<?php echo $productId?>" name="p_ids">
+                       <button type="submit" name="pay" class="btn btn-danger">Pay Now!</button>
+
                </div>
 
 
            </div>
            </div>
+        </form>
 
        </div>
     <br>

@@ -1,7 +1,7 @@
 <?php
 require APPROOT . '/views/inc/header.php';
 require APPROOT . '/views/inc/navbar.php';
-//print_r($data['products']);
+
 ?>
 
         <div class="content">
@@ -126,7 +126,7 @@ require APPROOT . '/views/inc/navbar.php';
                             <div class="sort">
 
                                 <div class="sort-by">
-                                    <form action="<?php echo URLROOT; ?>/browse" id="sort" method="post">
+                                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="sort" method="post">
                                     <label>Sort By</label>
                                         <?php
                                             if (isset($_GET['perpage'])){
@@ -146,7 +146,7 @@ require APPROOT . '/views/inc/navbar.php';
 
 
                             </div>
-                            <form action="<?php echo URLROOT; ?>/browse" id="perpage" method="post">
+                            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="perpage" method="post">
                             <div class="pager">
                                 <div class="limiter visible-desktop">
                                     <label>Show</label>

@@ -31,7 +31,7 @@
                                                 $mid = calculate_median($count);
                                                 for($i=0;$i<$mid;$i++){
                                                     ?>
-                                                    <li><a href="men.html"><?php  echo $count[$i]['name'];?></a></li>
+                                                    <li><a href="<?php echo URLROOT; ?>/browse/category/<?php echo $count[$i]['id']?>"><?php  echo $count[$i]['name'];?></a></li>
                                                     <?php
                                                 }
                                             }
@@ -40,7 +40,7 @@
                                             }
                                             else{
                                             ?>
-                                            <li><a href="men.html"><?php  echo $count[0]['name'];?></a></li>
+                                            <li><a href="<?php echo URLROOT; ?>/browse/category/<?php echo $count[0]['id']?>"><?php  echo $count[0]['name'];?></a></li>
                                             <?php
                                             }
                                             ?>
@@ -70,7 +70,7 @@
                                             if($i>1){
                                             for($i=3;$i<$icount;$i++){
                                                 ?>
-                                                <li><a href="men.html"><?php  echo $count[$i]['name'];?></a></li>
+                                                <li><a href="<?php echo URLROOT; ?>/browse/category/<?php echo $count[$i]['id']?>"><?php  echo $count[$i]['name'];?></a></li>
                                                 <?php
                                             }
                                             }
@@ -86,7 +86,7 @@
                                             foreach ($data['brands'] as $brand){
                                                 if ($brand->category_id == $primary->id){
                                                     ?>
-                                                    <li><a href="men.html"><?php echo $brand->name?></a></li>
+                                                    <li><a href="<?php echo URLROOT; ?>/browse/brand/<?php echo $brand->id?>"><?php echo $brand->name?></a></li>
                                             <?php
                                                 }
                                             }
@@ -104,22 +104,27 @@
                     <li><a class="color6" href="<?php echo URLROOT; ?>/pages/contact">Conact</a></li>
                 </ul>
             </div>
-            <div class="col-sm-3 header-top-right">
-                <div class="drop_buttons">
-                    <select class="drop-down ">
-                        <option value="1">Dollar</option>
-                        <option value="2">Euro</option>
-                    </select>
-                    <select class="drop-down drop-down-in">
-                        <option value="1">English</option>
-                        <option value="2">French</option>
-                        <option value="3">German</option>
-                    </select>
-                    <div class="clearfix"></div>
-                </div>
+            <div class="col-sm-2 header-top-right">
+
                 <div class="register-info">
                     <ul>
-                        <li><a href="login.html">Login</a></li>
+                        <?php
+                        if (isset($_SESSION['user_id'])){
+                        ?>
+                            <li>
+                                <?php
+                                echo 'Hello, '.$_SESSION['user_name'];
+                                ?>
+                                <a href="<?php echo URLROOT; ?>/login/logout">Logout</a>
+                            </li>
+                        <?php
+                        }
+                        else{
+                        ?>
+                            <li><a href="<?php echo URLROOT; ?>/login">Login</a></li>
+                        <?php
+                        }
+                        ?>
                     </ul>
                 </div>
                 <div class="clearfix"> </div>
@@ -139,8 +144,18 @@
                         <input type="submit" value="">
                     </div>
                     <ul class="bag">
-                        <a href="cart.html"><i class="bag_left"> </i></a>
-                        <a href="cart.html"><li class="bag_right"><p>205.00 $</p> </li></a>
+                        <a href="<?php echo URLROOT; ?>/cart"><i class="bag_left"> </i></a>
+                        <a href="<?php echo URLROOT; ?>/cart"><li class="bag_right"><p>
+
+                                    <?php
+                                    if (isset($_SESSION['cart'])){
+                                        echo count($_SESSION['cart']);
+                                    }
+                                    else{
+                                        echo '0';
+                                    }
+                                    ?>
+                                </p> </li></a>
                         <div class="clearfix"> </div>
                     </ul>
                     <div class="clearfix"> </div>

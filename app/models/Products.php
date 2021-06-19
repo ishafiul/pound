@@ -18,7 +18,7 @@ class Products
             return $results;
         }
     }
-    public function getPagination($offset, $no_of_records_per_page)
+    public function getPagination($offset, $no_of_records_per_page)//for all product admin
     {
         $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id
  where products.top_f=0 and products.boottom_f=0 LIMIT :limit OFFSET :offset ");
@@ -28,6 +28,228 @@ class Products
         return $results;
     }
 
+    //browse index
+    public function getPaginationAll($offset, $no_of_records_per_page)//for all product
+    {
+        $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getPaginationBySort($offset, $no_of_records_per_page,$sort)//for all product
+    {
+        if ($sort[0] == 1){
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id order by products.price desc LIMIT :limit OFFSET :offset ");
+
+        }
+        else{
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id order by products.price asc LIMIT :limit OFFSET :offset ");
+
+        }
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getPaginationByPrice($offset, $no_of_records_per_page,$price)//for all product
+    {
+        $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.price BETWEEN :low AND :high LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getTotalRowByPrice($price)//for all product
+    {
+        $this->db->query("SELECT COUNT(*) as total_row FROM products WHERE price BETWEEN :low AND :high");
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
+
+    public function getPaginationBySortPrice($offset, $no_of_records_per_page,$sort,$price)//for all product
+    {
+        if ($sort[0] == 1){
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.price BETWEEN :low AND :high order by products.price desc LIMIT :limit OFFSET :offset ");
+
+        }
+        else{
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.price BETWEEN :low AND :high order by products.price asc LIMIT :limit OFFSET :offset ");
+
+        }
+        //$this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id WHERE products.price BETWEEN :low AND :high LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+
+    /*end*/
+    public function getPaginationAllCatId($offset, $no_of_records_per_page,$id)//for all product
+    {
+        $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id where products.category = :id GROUP BY products.id LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getTotalRowByCatId($id){
+        $this->db->query("SELECT COUNT(*) as total_row FROM products where category=:id");
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
+    public function getPaginationBySortCatId($offset, $no_of_records_per_page,$sort,$id){
+        if ($sort[0] == 1){
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id where products.category = :id GROUP BY products.id order by products.price desc LIMIT :limit OFFSET :offset ");
+
+        }
+        else{
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id where products.category = :id GROUP BY products.id order by products.price asc LIMIT :limit OFFSET :offset ");
+
+        }
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getPaginationByPriceCatId($offset, $no_of_records_per_page,$price,$id)//for all product
+    {
+        $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.category = :id and products.price BETWEEN :low AND :high GROUP BY products.id LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getTotalRowByPriceCatId($price,$id)//for all product
+    {
+        $this->db->query("SELECT COUNT(*) as total_row FROM products WHERE category = :id and price BETWEEN :low AND :high");
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
+    public function getPaginationBySortPriceCatId($offset, $no_of_records_per_page,$sort,$price,$id)//for all product
+    {
+        if ($sort[0] == 1){
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.category = :id and products.price BETWEEN :low AND :high GROUP BY products.id order by products.price desc LIMIT :limit OFFSET :offset ");
+
+        }
+        else{
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.category = :id and products.price BETWEEN :low AND :high GROUP BY products.id order by products.price asc LIMIT :limit OFFSET :offset ");
+
+        }
+        //$this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id WHERE products.price BETWEEN :low AND :high LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+/**/
+    public function getPaginationAllBrandId($offset, $no_of_records_per_page,$id)//for all product
+    {
+        $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id where products.brand = :id GROUP BY products.id LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getTotalRowByBrandId($id){
+        $this->db->query("SELECT COUNT(*) as total_row FROM products where brand=:id");
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
+    public function getPaginationBySortBrandId($offset, $no_of_records_per_page,$sort,$id){
+        if ($sort[0] == 1){
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id where products.brand = :id GROUP BY products.id order by products.price desc LIMIT :limit OFFSET :offset ");
+
+        }
+        else{
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id where products.brand = :id GROUP BY products.id order by products.price asc LIMIT :limit OFFSET :offset ");
+
+        }
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getPaginationByPriceBrandId($offset, $no_of_records_per_page,$price,$id)//for all product
+    {
+        $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.brand = :id and products.price BETWEEN :low AND :high GROUP BY products.id LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        return $results;
+    }
+    public function getTotalRowByPriceBrandId($price,$id)//for all product
+    {
+        $this->db->query("SELECT COUNT(*) as total_row FROM products WHERE brand = :id and price BETWEEN :low AND :high");
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
+    public function getPaginationBySortPriceBrandId($offset, $no_of_records_per_page,$sort,$price,$id)//for all product
+    {
+        if ($sort[0] == 1){
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.brand = :id and products.price BETWEEN :low AND :high GROUP BY products.id order by products.price desc LIMIT :limit OFFSET :offset ");
+
+        }
+        else{
+            $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id WHERE products.brand = :id and products.price BETWEEN :low AND :high GROUP BY products.id order by products.price asc LIMIT :limit OFFSET :offset ");
+
+        }
+        //$this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id WHERE products.price BETWEEN :low AND :high LIMIT :limit OFFSET :offset ");
+        $this->db->bind(':limit', $no_of_records_per_page);
+        $this->db->bind(':offset', $offset);
+        $this->db->bind(':low', $price[0]);
+        $this->db->bind(':high', $price[1]);
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        return $results;
+    }
     public function getTopF(){
         $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id
   where top_f=1");
@@ -41,6 +263,15 @@ class Products
     public function getBottomF(){
         $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id
  where boottom_f=1");
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
+    public function getHomeproduct(){
+        $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id where products.add_to_home=1 GROUP BY products.id");
         $results = $this->db->resultSet();
         if ($results) {
             return $results;
@@ -107,5 +338,44 @@ class Products
         $this->db->bind(':brand', $data['brand']);
         $this->db->bind(':id', $data['id']);
         $this->db->execute();
+    }
+    public function addToHome($id){
+        $this->db->query("UPDATE products SET add_to_home=1 where id=:id");
+        $this->db->bind(':id', $id);
+        $this->db->execute();
+    }
+    public function removeFromHome($id){
+        $this->db->query("UPDATE products SET add_to_home=0 where id=:id");
+        $this->db->bind(':id', $id);
+        $this->db->execute();
+    }
+    public function getRelatedProduct($product){
+        $this->db->query("SELECT products.*,RAND() as IDX,image.img as product_base_img FROM `products` JOIN image ON products.id = image.product_id WHERE category=:id GROUP BY products.id ORDER by IDX LIMIT 4");
+        $this->db->bind(':id', $product[0]->category);
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
+    public function getCartProduct($id){
+        $this->db->query("SELECT products.*, image.img as product_base_img FROM products JOIN image ON products.id = image.product_id where products.id in ($id) GROUP BY products.id");
+        //$this->db->bind(':ids', $id);
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
+    public function getAllProduct(){
+        $this->db->query("SELECT * FROM products");
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
     }
 }

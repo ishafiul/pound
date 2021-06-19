@@ -4,6 +4,7 @@ class Admins extends Controller
 {
     public function __construct()
     {
+        $this->payModel = $this->model('Payment');
         $this->adminModel = $this->model('Admin');
         $this->sliderModel = $this->model('Slider');
         $this->siteInfoModel = $this->model('SiteInfo');
@@ -17,10 +18,24 @@ class Admins extends Controller
     public function index()
     {// function name will define what will be the page url that user will input
         $info = $this->siteInfoModel->getSiteInfo();
+        $pageno = '';
+        if (isset($_GET['pageno'])) {
+            $pageno = $_GET['pageno'];
+        } else {
+            $pageno = 1;
+        }
+        $no_of_records_per_page = 25;
+        $offset = ($pageno - 1) * $no_of_records_per_page;
+        $total_rows = $this->payModel->getTotalRow();
+        $total_pages = ceil($total_rows[0]->total_row / $no_of_records_per_page);
+        $payment = $this->payModel->getPagination($offset, $no_of_records_per_page);
         $data = [
             'page_title' => 'Admin Dash',
             'description' => '',
-            'info' => $info
+            'info' => $info,
+            'total_pages' =>$total_pages,
+            'payment'=>$payment,
+            'pageno'=>$pageno,
         ];
 
         $this->view('admin/index', $data); // which view will load
@@ -102,8 +117,8 @@ class Admins extends Controller
 
     public function createUserSession($user)
     {
-        $_SESSION['user_id'] = $user->id;
-        $_SESSION['user_name'] = $user->username;
+        $_SESSION['user_id_admin'] = $user->id;
+        $_SESSION['user_name_admin'] = $user->username;
         //$_SESSION['user_name'] = $user->name;
         //$_SESSION['user_type'] = $user->type;
         redirect('admins');
@@ -111,9 +126,9 @@ class Admins extends Controller
 
     public function logout()
     {
-        unset($_SESSION['user_id']);
+        unset($_SESSION['user_id_admin']);
         //unset($_SESSION['user_email']);
-        unset($_SESSION['user_name']);
+        unset($_SESSION['user_name_admin']);
         session_destroy();
         redirect('admins/login');
     }
@@ -1120,6 +1135,74 @@ class Admins extends Controller
             $data['product_succ'] = "Removed Bottom Featured Successfully please reload the page";
             $this->productModel->removeBottomF($data['id']);
         }
+        if (isset($_POST['addToHome'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'total_pages' =>$total_pages,
+                'pageno'=>$pageno,
+                'top_featured'=>$topFeatured,
+                'bottom_featured'=>$bottomFeatured,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'upload_img'=>'',
+                'name'=>'',
+                'price'=>'',
+                'short_info'=>'',
+                'details'=>'',
+                'more_info'=>'',
+                'category'=>'',
+                'brand'=>'',
+                'upload_img_err'=>'',
+                'name_err'=>'',
+                'price_err'=>'',
+                'short_info_err'=>'',
+                'details_err'=>'',
+                'more_info_err'=>'',
+                'category_err'=>'',
+                'brand_err'=>'',
+                'product_succ'=>'',
+                'id'=>$_POST['id']
+            ];
+            $data['product_succ'] = "Added to Home Successfully please reload the page";
+            $this->productModel->addToHome($data['id']);
+        }
+        if (isset($_POST['removeFromHome'])){
+            $data = [
+                'page_title' => 'Products',
+                'description' => '',
+                'info' => $info,
+                'products' => $products,
+                'total_pages' =>$total_pages,
+                'pageno'=>$pageno,
+                'top_featured'=>$topFeatured,
+                'bottom_featured'=>$bottomFeatured,
+                'childCategory' => $categoryChild,
+                'brands'=>$brands,
+                'upload_img'=>'',
+                'name'=>'',
+                'price'=>'',
+                'short_info'=>'',
+                'details'=>'',
+                'more_info'=>'',
+                'category'=>'',
+                'brand'=>'',
+                'upload_img_err'=>'',
+                'name_err'=>'',
+                'price_err'=>'',
+                'short_info_err'=>'',
+                'details_err'=>'',
+                'more_info_err'=>'',
+                'category_err'=>'',
+                'brand_err'=>'',
+                'product_succ'=>'',
+                'id'=>$_POST['id']
+            ];
+            $data['product_succ'] = "Removed From Home Successfully please reload the page";
+            $this->productModel->removeFromHome($data['id']);
+        }
         $this->view('admin/product', $data);
     }
     public function editproduct($Url){
@@ -1247,9 +1330,5 @@ class Admins extends Controller
 
             $this->view('admin/editproduct', $data);
         }
-
-
     }
-
-
 }

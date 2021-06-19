@@ -80,8 +80,8 @@
 </div>
 </div>
 </div>
-<link href="css/flexslider.css" rel='stylesheet' type='text/css' />
-<script defer src="js/jquery.flexslider.js"></script>
+<link href="<?php echo URLROOT; ?>/public/css/flexslider.css" rel='stylesheet' type='text/css' />
+<script defer src="<?php echo URLROOT; ?>/public/js/jquery.flexslider.js"></script>
 <script type="text/javascript">
     $(function(){
         SyntaxHighlighter.all();
