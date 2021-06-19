@@ -75,13 +75,13 @@
         <div class="clearfix"></div>
     </div>
     <div class="copy">
-        <p>© 2015 All Rights Reseverd Template by <a href="http://w3layouts.com/">W3layouts</a> </p>
+        <p>© 2015 All Rights Reseverd by <?php echo $data['info'][0]->title?> </p>
     </div>
 </div>
 </div>
 </div>
-<link href="css/flexslider.css" rel='stylesheet' type='text/css' />
-<script defer src="js/jquery.flexslider.js"></script>
+<link href="<?php echo URLROOT; ?>/public/css/flexslider.css" rel='stylesheet' type='text/css' />
+<script defer src="<?php echo URLROOT; ?>/public/js/jquery.flexslider.js"></script>
 <script type="text/javascript">
     $(function(){
         SyntaxHighlighter.all();

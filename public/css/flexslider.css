@@ -36,13 +36,13 @@ html[xmlns] .slides {display: block;}
 
 /* FlexSlider Default Theme
 *********************************/
-.flexslider { background: ; position: relative; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; ,0,0,.2); zoom: 1;}
+.flexslider {  position: relative; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; ,0,0,.2); zoom: 1;}
 .flex-viewport {max-height:1500px; -webkit-transition: all 1s ease; -moz-transition: all 1s ease; transition: all 1s ease;}
 .loading .flex-viewport {max-height: 300px;}
 .flexslider .slides {zoom: 1;}
 .carousel li {margin-right: 5px}
 /* Direction Nav */
-.flex-direction-nav a {display:none; width: 34px; height: 48px; margin: -20px 0 0; display: block; background: url(../images/arrows.png) no-repeat 0 0; position: absolute; top:46%; cursor: pointer; text-indent: -9999px; opacity: 0; -webkit-transition: all .3s ease;}
+.flex-direction-nav a {display:none; width: 34px; height: 48px; margin: -20px 0 0; display: block;  no-repeat: 0 0; position: absolute; top:46%; cursor: pointer; text-indent: -9999px; opacity: 0; -webkit-transition: all .3s ease;}
 .flex-direction-nav .flex-next {background-position: 100% 0; right:0px; }
 .flex-direction-nav .flex-prev {left: 0px;}
 .flexslider:hover .flex-next {opacity: 0.8; right: 0px;}
@@ -53,7 +53,7 @@ html[xmlns] .slides {display: block;}
 /* Control Nav */
 .flex-control-nav { display:none; position: absolute; bottom:-40px; text-align: center;right:0;}
 .flex-control-nav li {display:inline-block; zoom: 1; *display: inline;padding:0.2em;}
-.flex-control-paging li a {width: 8px; height: 8px; display:inline-block;  background:#602D8D; cursor: pointer; text-indent: -9999px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; border-radius: 20px; box-shadow: inset 0 0 3px rgba(0,0,0,0.3); border:;}
+.flex-control-paging li a {width: 8px; height: 8px; display:inline-block;  background:#602D8D; cursor: pointer; text-indent: -9999px; -webkit-border-radius: 20px; -moz-border-radius: 20px; -o-border-radius: 20px; border-radius: 20px; box-shadow: inset 0 0 3px rgba(0,0,0,0.3); }
 .flex-control-paging li a:hover { background:#c36c88; }
 .flex-control-paging li a.flex-active { background:#CC3636; cursor: default; }
 
@@ -67,7 +67,6 @@ html[xmlns] .slides {display: block;}
 	
 }
 .flexslider1 ol.flex-control-nav{
-	width: ;
 	position: absolute;
 	bottom: -49px;
 	text-align: center;
@@ -105,4 +104,3 @@ html[xmlns] .slides {display: block;}
 
 }
 
-}

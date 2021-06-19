@@ -1,16 +1,42 @@
-<?php require APPROOT . '/views/inc/header.php'; ?>
-<?php require APPROOT . '/views/inc/navbar.php';
+<?php
+require APPROOT . '/views/inc/header.php';
+require APPROOT . '/views/inc/navbar.php';
 ?>
         <div class="grid_1">
             <div class="col-md-3 banner_left">
-                <img src="<?php echo URLROOT; ?>/images/pic1.png" class="img-responsive" alt=""/>
+                <img src="<?php echo URLROOT; ?>/img/product/<?php
+                if (!empty($data['top_f'])) {
+                    echo $data['product_img_top'][0]->img;
+                }
+                ?>" class="img-responsive" alt=""/>
                 <div class="banner_desc">
-                    <h1>Slim Fit Men </h1>
-                    <h2>Roundcheck T-Shirt</h2>
-                    <h5>$125
+                    <h1><?php
+                        if (!empty($data['top_f'])) {
+                            echo $data['top_f'][0]->product_name;
+                        }
+                        ?> </h1>
+                    <h2><?php
+                        if (!empty($data['top_f'])) {
+                        foreach ($data['child'] as $ctaegory){
+                        if ($ctaegory->id == $data['top_f'][0]->category) {
+                            echo $ctaegory->name;
+                        }
+                        }
+                        }?></h2>
+                    <h5>$<?php
+                        if (!empty($data['top_f'])) {
+                            echo $data['top_f'][0]->price;
+
+                        }?>
                         <small>Only</small>
                     </h5>
-                    <a href="#" class="btn1 btn4 btn-1 btn1-1b">Add To Cart</a>
+                    <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                        <input type="hidden" name="id" value="<?php if (!empty($data['top_f'])) {
+                            echo $data['top_f'][0]->id;
+
+                        }?>">
+                    <button class="btn1 btn4 btn-1 btn1-1b" type="submit" name="addToCart">Add To Cart</button>
+                    </form>
                 </div>
             </div>
             <div class="col-md-9 banner_right">
@@ -35,26 +61,19 @@
         <div class="content">
             <div class="content_box">
                 <ul class="grid_2">
-                    <a href="single.html"><li><img src="<?php echo URLROOT; ?>/images/pic2.png" class="img-responsive" alt=""/>
-                            <span class="btn5">$120</span>
-                            <p>Bikroy Tshirt - Roundneck</p>
+                    <?php
+                    if (!empty($data['home_product'])){
+                        foreach ($data['home_product'] as $product){
+
+                    ?>
+                    <a href="<?php echo URLROOT; ?>/product/<?php echo $product->url?>"><li><img src="<?php echo URLROOT; ?>/img/product/<?php echo $product->product_base_img?>" class="img-responsive" alt=""/>
+                            <span class="btn5">$<?php echo $product->price?></span>
+                            <p><?php echo $product->product_name?></p>
                         </li></a>
-                    <a href="single.html"><li><img src="<?php echo URLROOT; ?>/images/pic3.png" class="img-responsive" alt=""/>
-                            <span class="btn5">$340</span>
-                            <p>Park Tshirt - Partygrandd</p>
-                        </li></a>
-                    <a href="single.html"><li><img src="<?php echo URLROOT; ?>/images/pic4.png" class="img-responsive" alt=""/>
-                            <span class="btn5">$250</span>
-                            <p>Gray Tshirt Roundneckdd</p>
-                        </li></a>
-                    <a href="single.html"><li><img src="<?php echo URLROOT; ?>/images/pic5.png" class="img-responsive" alt=""/>
-                            <span class="btn5">$378</span>
-                            <p>Marivo Tshirt - Roundneck</p>
-                        </li></a>
-                    <a href="single.html"><li class="last1"><img src="<?php echo URLROOT; ?>/images/pic6.png" class="img-responsive" alt=""/>
-                            <span class="btn5">$428</span>
-                            <p>Strict TshirtSoft, Pure Cotton</p>
-                        </li></a>
+                    <?php
+                        }
+                    }
+                    ?>
                     <div class="clearfix"> </div>
                 </ul>
                 <div class="grid_3">
@@ -72,16 +91,30 @@
                     <div class="col-md-6">
                         <div class="box_3">
                             <div class="col_1_of_2 span_1_of_2 span_3">
-                                <h3>Paul Slim Fit Men
-                                    Roundneck
-                                    T-Shirt</h3>
-                                <h4>$156</h4>
-                                <p>Offer Available till Sunday 12 Nov 2014.</p>
-                                <a href="#" class="btn1 btn6 btn-1 btn1-1b">Add To Cart</a>
+                                <br>
+                                <h3><?php
+                                    if (!empty($data['bottom_f'])){
+                                    echo $data['bottom_f'][0]->product_name;
+                                    }
+                                    ?>
+                                   </h3>
+                                <h4>$<?php
+                                    if (!empty($data['bottom_f'])){
+                                        echo $data['bottom_f'][0]->price;
+                                    }
+                                    ?></h4>
+                                <br>
+                                <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                                    <input type="hidden" name="id" value="<?php if (!empty($data['bottom_f'])) {
+                                        echo $data['bottom_f'][0]->id;
+
+                                    }?>">
+                                    <button class="btn1 btn6 btn-1 btn1-1b" type="submit" name="addToCart">Add To Cart</button>
+                                </form>
                             </div>
                             <div class="col_1_of_2 span_1_of_2 span_4">
                                 <div class="span_5">
-                                    <img src="<?php echo URLROOT; ?>/images/pic9.png" class="img-responsive" alt=""/>
+                                    <img src="<?php echo URLROOT; ?>/img/product/<?php if (!empty($data['bottom_f'])){echo $data['product_img_bottom'][0]->img;}?>" class="img-responsive" alt=""/>
                                 </div>
                             </div>
                             <div class="clearfix"> </div>
@@ -95,6 +128,7 @@
         </div>
         <link href="<?php echo URLROOT; ?>/css/flexslider.css" rel='stylesheet' type='text/css' />
         <script defer src="<?php echo URLROOT; ?>/js/jquery.flexslider.js"></script>
+
         <script type="text/javascript">
             $(function(){
                 SyntaxHighlighter.all();

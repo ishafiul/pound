@@ -104,7 +104,7 @@ ul.bag li.bag_right p{
 	font-size: 1.5em;
 	color:#000;
 	line-height: 1.8em;
-	text-transform:uppercase
+	text-transform:uppercase;
 	margin-bottom: 4%;
 }
 .h_nav h4.top{
@@ -550,7 +550,7 @@ p.empty {
 .mens-toolbar .pager {
   padding: 1px 8px 3px 8px;
   float: right;
-  width: 42.5%;
+  width: 60%;
   margin: 0;
 }
 .limiter {
@@ -593,11 +593,18 @@ ul.dc_pagination li a {
   padding: 2em 0;
 }
 .span_1_of_single1 {
-	width: 30.7%;
 	border: 1px solid #fff;
 	text-align: center;
 	padding: 0 0 1em 0;
 }
+/*@media screen and (min-width: 480px) {
+    .span_1_of_single1 {
+        width: 100%;
+        border: 1px solid #fff;
+        text-align: center;
+        padding: 0 0 1em 0;
+    }
+}*/
 .span_1_of_single1:hover{
 	border: 1px solid #DDD;
 }
@@ -951,13 +958,30 @@ a.create:hover, .account-top input[type="submit"]:hover, .register-but form inpu
 	display: block;
 	text-transform: uppercase;
 }
-.register-top-grid input[type="text"], .register-bottom-grid input[type="text"] {
+
+/*.register-top-grid input[type="password"], .register-bottom-grid input[type="password"],.register-top-grid input[type="password"] {
 	border: 1px solid #EEE;
 	outline-color:#FF5B36;
 	width: 96%;
 	font-size: 1em;
 	padding: 0.5em;
 }
+.register-top-grid input[type="email"], .register-bottom-grid input[type="email"],.register-top-grid input[type="email"] {
+    border: 1px solid #EEE;
+    outline-color:#FF5B36;
+    width: 96%;
+    font-size: 1em;
+    padding: 0.5em;
+}*/
+.register-top-grid input[type="text"], .register-bottom-grid input[type="password"],.register-top-grid input[type="email"] {
+    border: 1px solid #EEE;
+    outline-color:#FF5B36;
+    width: 96%;
+    font-size: 1em;
+    padding: 0.5em;
+}
+
+
 .checkbox {
 	margin-bottom: 4px;
 	padding-left: 27px;
@@ -1111,7 +1135,7 @@ p.m_5 {
   width: 35.5%;
 }
 .mens-toolbar .pager {
-  width: 50.5%;
+  width: 60%;
 }
 }
 @media (max-width:920px){
@@ -1272,7 +1296,7 @@ ul.grid_2 li p {
   font-size: 1.1em;
 }
 .mens-toolbar .pager {
-  width: 56.5%;
+  width: 60%;
 }
 .mens-toolbar .sort {
   width: 43.5%;

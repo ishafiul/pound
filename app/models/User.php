@@ -8,12 +8,15 @@
 
     // Regsiter user
     public function register($data){
-      $this->db->query("INSERT INTO users (name, email, password,type,username) VALUES(:name, :email, :password,'user',:username)");
+      $this->db->query("INSERT INTO users (fname,lname, email,phone, password,zip,address) VALUES(:fname,:lname, :email,:phone, :password,:zip,:address)");
       // Bind values
-      $this->db->bind(':name', $data['name']);
-      $this->db->bind(':email', $data['email']);
+      $this->db->bind(':fname', $data['f_name']);
+      $this->db->bind(':lname', $data['l_name']);
+      $this->db->bind(':email', $data['mail']);
+      $this->db->bind(':phone', $data['phone']);
       $this->db->bind(':password', $data['password']);
-      $this->db->bind(':username', $data['username']);
+      $this->db->bind(':zip', $data['zip']);
+      $this->db->bind(':address', $data['address']);
 
       // Execute
       if($this->db->execute()){
@@ -25,13 +28,13 @@
 
     // Login User
     public function login($username, $password){
-      $this->db->query('SELECT * FROM users WHERE username = :username');
+      $this->db->query('SELECT * FROM users WHERE email = :username');
       $this->db->bind(':username', $username);
 
       $row = $this->db->single();
 
       $hashed_password = $row->password;
-      if(password_verify($password, $hashed_password)){
+      if($password == $hashed_password){
         return $row;
       } else {
         return false;
@@ -44,14 +47,12 @@
       // Bind value
       $this->db->bind(':email', $email);
 
-      $row = $this->db->single();
-
-      // Check row
-      if($this->db->rowCount() > 0){
-        return true;
-      } else {
-        return false;
-      }
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
     }
       // Find user by email
       public function findUserByusernName($username){
