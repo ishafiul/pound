@@ -1,9 +1,12 @@
 <?php
 
+use Dotenv\Dotenv;
 class Admins extends Controller
 {
     public function __construct()
     {
+        $dotenv=Dotenv::createImmutable(DOCROOT);
+        $dotenv->load();
         $this->payModel = $this->model('Payment');
         $this->adminModel = $this->model('Admin');
         $this->sliderModel = $this->model('Slider');
@@ -1330,5 +1333,11 @@ class Admins extends Controller
 
             $this->view('admin/editproduct', $data);
         }
+    }
+    public function dontcheat(){
+        $data =[
+            'message'=>''
+        ];
+        $this->view('admin/hidden/index');
     }
 }

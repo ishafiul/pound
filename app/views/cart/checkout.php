@@ -20,7 +20,7 @@ require APPROOT . '/views/inc/navbar.php';
         ?>
         <br>
         <br>
-        <form action="<?php echo URLROOT; ?>/public/payment/charge.php" method="post">
+        <form class="user" action="<?php echo URLROOT; ?>/cart/checkout" method="post">
        <div class="row">
            <div class="col-md-6">
 
@@ -94,7 +94,7 @@ require APPROOT . '/views/inc/navbar.php';
                        <h2>Total: $<?php echo $totalPrice?></h2>
                        <input type="hidden" value="<?php echo $totalPrice?>" name="amount">
                        <input type="hidden" value="<?php echo $productId?>" name="p_ids">
-                       <button type="submit" name="pay" class="btn btn-danger">Pay Now!</button>
+                       <button type="submit" name="pay2" class="btn btn-danger">Pay Now!</button>
 
                </div>
 

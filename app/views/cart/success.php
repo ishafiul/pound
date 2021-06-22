@@ -6,9 +6,22 @@ require APPROOT . '/views/inc/navbar.php';
     <div class="content_box">
         <br>
         <br>
-        <div class="alert alert-success" role="alert">
-            Your payment has been processed successfully and you booking is confirmed. Your transaction id is : <br><i><?php echo $data['id']?></i>
-        </div>
+        <?php
+        if (!empty($data['transiction'])){
+             ?>
+            <div class="alert alert-success" role="alert">
+               <?php echo $data['transiction']?>
+            </div>
+        <?php
+        }
+        else{
+        ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $data['transiction_err']?>
+            </div>
+        <?php
+        }
+        ?>
         <br>
         <br>
         <?php require APPROOT . '/views/inc/footer.php'; ?>

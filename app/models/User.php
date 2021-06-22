@@ -14,7 +14,7 @@
       $this->db->bind(':lname', $data['l_name']);
       $this->db->bind(':email', $data['mail']);
       $this->db->bind(':phone', $data['phone']);
-      $this->db->bind(':password', $data['password']);
+      $this->db->bind(':password', $data['pass1']);
       $this->db->bind(':zip', $data['zip']);
       $this->db->bind(':address', $data['address']);
 
