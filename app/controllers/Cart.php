@@ -1,6 +1,9 @@
 <?php
+
+
 class Cart extends Controller
 {
+    private $gateway='';
     public function __construct()
     {
         $this->userModel = $this->model('User');
@@ -63,6 +66,8 @@ class Cart extends Controller
     }
     public function checkout()
     {
+        global $gateway;
+
         $info = $this->siteInfoModel->getSiteInfo();
         $primary_cat = $this->categoryModel->getPrimaryCategory();
         $child = $this->categoryModel->getChildCategory();
@@ -100,17 +105,53 @@ class Cart extends Controller
             $user = $this->userModel->findUserByEmail($_SESSION['user_email']);
             $data['user_info'] =$user;
         }
+        if (isset($_POST['pay2'])) {
+            $data['fname'] =$_POST['fname'];
+            $data['lname']=$_POST['l_name'];
+            $data['email']=$_POST['mail'];
+            $data['phone']=$_POST['phone'];
+            $data['zip']=$_POST['zip'];
+            $data['address']=$_POST['address'];
+            $data['user_id'] = '';
+            if (!empty($_POST['user_id'])){
+                $data['user_id'] = $_POST['user_id'];
+            }
+            $data['product_ids']=$_POST['p_ids'];
+
+            try {
+                $response = $gateway->purchase(array(
+                    'amount' => $_POST['amount'],
+                    'items' => array(
+                        array(
+                            'name' => '',
+                            'price' => $_POST['amount'],
+                            'description' => '',
+                            'quantity' => 1
+                        ),
+                    ),
+                    'currency' => $_ENV['PAYPAL_CURRENCY'],
+                    'returnUrl' => $_ENV['PAYPAL_RETURN_URL'],
+                    'cancelUrl' => $_ENV['PAYPAL_CANCEL_URL'],
+                ))->send();
+
+                if ($response->isRedirect()) {
+                    $response->redirect(); // this will automatically forward the customer
+                } else {
+                    // not successful
+                    echo $response->getMessage();
+                }
+            } catch(Exception $e) {
+                echo $e->getMessage();
+            }
+        }
         $this->view('cart/checkout', $data);
     }
     public function success(){
+        global $gateway;
         $info = $this->siteInfoModel->getSiteInfo();
         $primary_cat = $this->categoryModel->getPrimaryCategory();
         $child = $this->categoryModel->getChildCategory();
         $brand = $this->brandModel->getBrands();
-        $cart_p = [];
-        if (isset($_GET['id']) && isset($_SESSION['cart'])) {
-            unset($_SESSION['cart']);
-        }
         $data = [
             'description' => '',
             'page_title' => 'About Us',
@@ -120,10 +161,45 @@ class Cart extends Controller
             'brands' => $brand,
             'id' => '',
             'cart' => '',
-            'user_info'=>''
+            'user_info'=>'',
+            'transiction'=>'',
+            'transiction_err'=>'',
         ];
-        if (isset($_GET['id'])){
-            $data['id']=$_GET['id'];
+        if (array_key_exists('paymentId', $_GET) && array_key_exists('PayerID', $_GET)) {
+            $transaction = $gateway->completePurchase(array(
+                'payer_id'             => $_GET['PayerID'],
+                'transactionReference' => $_GET['paymentId'],
+            ));
+            $response = $transaction->send();
+
+            if ($response->isSuccessful()) {
+                // The customer has successfully paid.
+                $arr_body = $response->getData();
+
+                $payment_id = $arr_body['id'];
+                $payer_id = $arr_body['payer']['payer_info']['payer_id'];
+                $payer_email = $arr_body['payer']['payer_info']['email'];
+                $amount = $arr_body['transactions'][0]['amount']['total'];
+                $currency = $_ENV['PAYPAL_CURRENCY'];
+                $payment_status = $arr_body['state'];
+                //$id = $arr_body['transactions'][0]['item_list']['items'][0]['description'];
+
+                // Insert transaction data into the database
+                /* $isPaymentExist = $db->query("SELECT * FROM payments WHERE payment_id = '".$payment_id."'");*/
+
+                /*if($isPaymentExist->num_rows == 0) {
+                    $insert = $db->query("UPDATE payments SET payment_id='$payment_id', payer_id='$payer_id', payer_email='$payer_email', amount='$amount', currency='$currency', payment_status='$payment_status' where id='$id'");
+                }*/
+                if (isset($_SESSION['cart'])) {
+                    unset($_SESSION['cart']);
+                }
+                $data['transiction'] = 'Your payment has been processed successfully and you booking is confirmed. Your transaction id is :'.$payment_id;
+                $this->view('cart/success',$data);
+            } else {
+                $data['transiction_err']=$response->getMessage();
+            }
+        } else {
+            $data['transiction_err'] ='Transaction is declined';
         }
         $this->view('cart/success',$data);
     }

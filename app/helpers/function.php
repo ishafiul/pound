@@ -1,4 +1,5 @@
 <?php
+require_once 'vendor/autoload.php';
 function calculate_median($arr) {
     $coun = count($arr); //total numbers in array
     if($coun % 2) { // odd number, middle is the median
