@@ -8,6 +8,9 @@ require_once 'inc/header.php';
        <div class="card">
            <form action="<?php echo URLROOT; ?>/admins/brands" method="post">
            <div class="card-body">
+               <?php
+               reloadflash('brand_succ');
+               ?>
                <h4 class="card-title">Add Brands</h4>
                <div class="form-group">
                    <label for="exampleInputPassword1">Brand Name</label>

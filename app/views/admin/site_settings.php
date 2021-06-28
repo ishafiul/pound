@@ -10,7 +10,8 @@ require_once 'inc/header.php';
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-
+                    <?php reloadflash('slider_success');
+                    ?>
                     <h4 class="card-title">Slider</h4>
 
                     <?php
@@ -90,6 +91,8 @@ require_once 'inc/header.php';
             <br>
             <div class="card">
                 <div class="card-body">
+                    <?php reloadflash('featur1_success');
+                    ?>
                     <h4 class="card-title">Featured Image 1</h4>
                     <div class="row">
                         <div class="col-md-6">
@@ -114,6 +117,8 @@ require_once 'inc/header.php';
                         </div>
                     </div>
                     <hr>
+                    <?php reloadflash('featur2_success');
+                    ?>
                     <h4 class="card-title">Featured Image 2</h4>
                     <div class="row">
                         <div class="col-md-6">
@@ -145,6 +150,8 @@ require_once 'inc/header.php';
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
+                    <?php reloadflash('logo_success');
+                    ?>
                     <h4 class="card-title">Logo</h4>
                     <div class="row">
                         <div class="col-md-6">
@@ -174,6 +181,8 @@ require_once 'inc/header.php';
             <br>
             <div class="card">
                 <div class="card-body">
+                    <?php reloadflash('info_success');
+                    ?>
                     <h4 class="card-title">Other Site info</h4>
                     <span class="text-success"><?php echo $data['infoUpdate_success'];?></span>
                     <form action="<?php echo URLROOT; ?>/admins/settings" method="post">
@@ -185,9 +194,13 @@ require_once 'inc/header.php';
                             <label for="exampleInputPassword1">Site Description</label>
                             <input type="text" name="details" class="form-control" id="exampleInputPassword1" placeholder="" value="<?php echo $data['info'][0]->details?>">
                         </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Site Description</label>
+                            <input type="text" name="details" class="form-control" id="exampleInputPassword1" placeholder="" value="<?php echo $data['info'][0]->main_phone?>">
+                        </div>
                         <br>
                         <hr>
-                        <h4 class="card-title">Social Media <small>(Full Link)</small></h4>
+                        <h4 class="card-title">Social Media <small>(Full Link with http://)</small></h4>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Facebook</label>
                             <input type="text" name="fb" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="" value="<?php echo $data['info'][0]->fb?>">
@@ -211,6 +224,7 @@ require_once 'inc/header.php';
             <br>
         </div>
     </div>
+
 <?php
 require_once 'inc/footer.php';
 ?>

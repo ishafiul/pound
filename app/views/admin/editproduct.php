@@ -6,6 +6,9 @@ require_once 'inc/header.php';
 $product = $data['products'][0];
 ?>
     <span class="text-success"><?php echo $data['product_succ'];?></span>
+<?php
+reloadflash('product_succ');
+?>
     <div class="card">
         <div class="card-body">
 

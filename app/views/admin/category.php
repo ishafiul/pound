@@ -9,6 +9,9 @@ require_once 'inc/header.php';
             <!---->
             <div class="card">
                 <div class="card-body">
+                    <?php
+                    reloadflash('categoryP_success');
+                    ?>
                     <h4 class="card-title">Add Primary Category</h4>
 
                     <form action="<?php echo URLROOT; ?>/admins/Categories" method="post">
@@ -80,6 +83,9 @@ require_once 'inc/header.php';
             <!---->
             <div class="card">
                 <div class="card-body">
+                    <?php
+                    reloadflash('categoryC_success');
+                    ?>
                     <h4 class="card-title">Add Child Category</h4>
 
                     <form action="<?php echo URLROOT; ?>/admins/Categories" method="post">
