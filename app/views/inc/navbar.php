@@ -136,7 +136,7 @@
         <div class="header_bootm">
             <div class="col-sm-4 span_1">
                 <div class="logo">
-                    <a href="<?php echo URLROOT; ?>/index"><img src="<?php echo URLROOT.'/public/img/'.$data['info'][0]->logo; ?>" alt=""/></a>
+                    <a href="<?php echo URLROOT; ?>/index"><h1><?php echo $data['info'][0]->title?></h1></a>
                 </div>
             </div>
             <div class="col-sm-8 row_2">
