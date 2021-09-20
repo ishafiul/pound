@@ -195,7 +195,7 @@ require_once 'inc/header.php';
                             <input type="text" name="details" class="form-control" id="exampleInputPassword1" placeholder="" value="<?php echo $data['info'][0]->details?>">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Site Description</label>
+                            <label for="exampleInputPassword1">Site Phone Number</label>
                             <input type="text" name="details" class="form-control" id="exampleInputPassword1" placeholder="" value="<?php echo $data['info'][0]->main_phone?>">
                         </div>
                         <br>

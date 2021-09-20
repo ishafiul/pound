@@ -3,7 +3,7 @@ if (!isset($_SESSION['user_id_admin'])){
     redirect('admins/login');
 }
 require_once 'inc/header.php';
-//print_r($data['payment']);
+
 ?>
 <h1>All Sell Info</h1>
 <?php flash('register_success');

@@ -15,7 +15,7 @@ require APPROOT . '/views/inc/navbar.php';
                                 <div class="d-flex flex-column align-items-center text-center">
                                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                                     <div class="mt-3">
-                                        <h4>John Doe</h4>
+                                        <h4><?php echo $data['user_detail']->fname.' '.$data['user_detail']->lname?></h4>
                                     </div>
                                 </div>
                             </div>
@@ -24,21 +24,28 @@ require APPROOT . '/views/inc/navbar.php';
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-body">
-                                <h1 class="card-header">All Music</h1>
+                                <h1 class="card-header">All Purchase History </h1>
+
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th scope="col">Thumbnail</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Download</th>
+                                        <th scope="col">Payment id</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Product Codes</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="50"></td>
-                                        <td>Otto</td>
-                                        <td><a href="#" class="btn btn-primary"><i class="fas fa-download"></i> Download</a></td>
-                                    </tr>
+                                    <?php
+                                    foreach ($data['payment_info'] as $payment){
+                                        ?>
+                                        <tr>
+
+                                            <td><?php echo $payment->payment_id?></td>
+                                            <td><?php echo $payment->amount?></td>
+                                            <td><?php echo $payment->products_ids?></td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
                                     </tbody>
                                 </table>
                             </div>

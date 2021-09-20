@@ -30,9 +30,16 @@ body a{
 	background:#fff;
     color: #05CFE0;
 	padding:2em 0;
+    height: 115px;
+
 }
 .logo{
 	text-align:center;
+
+}
+.logo img{
+    position: relative;
+    max-height: 75px;
 }
 .row_2{
 	background: #fff;

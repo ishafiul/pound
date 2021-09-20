@@ -1,7 +1,7 @@
 <?php
 
 
-class Profile extends Controller
+class Search extends Controller
 {
     public function __construct(){
         //your models gose here . example : $this->ModelName = $this->model('model_class_name');
@@ -16,10 +16,7 @@ class Profile extends Controller
         $this->paymentModel = $this->model('Payment');
     }
     public function index(){
-        $user_id = $_SESSION['user_id'];
-        $user_detail = $this->userModel->getUserById($user_id);
 
-        $pament_info = $this->paymentModel->findPaymentByUser($user_detail->id);
 
 
 
@@ -28,17 +25,22 @@ class Profile extends Controller
         $primary_cat = $this->categoryModel->getPrimaryCategory();
         $child = $this->categoryModel->getChildCategory();
         $brand = $this->brandModel->getBrands();
+        $search_result ='';
+        if (isset($_GET['q'])){
+            $keyword = $_GET['q'];
+            $search_result = $this->productModel->getSearchResult($keyword);
+        }
         $data = [
             'page_title' => 'Contacts Us',
             'description' => '',
-            'user_detail'=>$user_detail,
-            'payment_info'=>$pament_info,
+            'result'=>$search_result,
             'info'=>$info,
             'office'=>$office,
             'primary_cat'=>$primary_cat,
             'child'=>$child,
             'brands'=>$brand
         ];
-        $this->view('profile/index', $data);
+        $this->view('search/index', $data);
+
     }
 }

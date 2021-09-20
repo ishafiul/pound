@@ -2,7 +2,6 @@
         <div class="header_top">
             <div class="col-sm-9 h_menu4">
                 <ul class="megamenu skyblue">
-                    <li class="active grid"><a class="color8" href="index.html">New</a></li>
                     <?php
                     $helper = new HelperFunction();
                     foreach ($data['primary_cat'] as $primary){
@@ -102,7 +101,6 @@
                     <?php
                     }
                     ?>
-                    <li><a class="color4" href="404.html">Accessories</a></li>
                     <li><a class="color6" href="<?php echo URLROOT; ?>/pages/contact">Conact</a></li>
                 </ul>
             </div>
@@ -136,14 +134,16 @@
         <div class="header_bootm">
             <div class="col-sm-4 span_1">
                 <div class="logo">
-                    <a href="<?php echo URLROOT; ?>/index"><h1><?php echo $data['info'][0]->title?></h1></a>
+                    <a  href="<?php echo URLROOT; ?>/index"><img class="gg" src="<?php echo URLROOT.'/public/img/'.$data['info'][0]->logo; ?>" alt="<?php echo $data['info'][0]->title?>" /></a>
                 </div>
             </div>
             <div class="col-sm-8 row_2">
                 <div class="header_bottom_right">
                     <div class="search">
-                        <input type="text" value="Your email address" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Your email address';}">
-                        <input type="submit" value="">
+                        <form action="<?php echo URLROOT; ?>/search" method="get">
+                            <input type="text" name="q" placeholder="Search here...">
+                            <input type="submit" value="">
+                        </form>
                     </div>
                     <ul class="bag">
                         <a href="<?php echo URLROOT; ?>/cart"><i class="bag_left"> </i></a>
