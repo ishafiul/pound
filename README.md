@@ -9,8 +9,9 @@ here you need to chang your url root and document root patha.
 
 another change for path is 
 
-###### RewriteBase /mvc/public
-
+###### RewriteBase /pound/public
+you can find it from 
+###### app->public->.htaceess
 if you want to live you site then keep only /public
 
 
