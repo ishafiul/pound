@@ -7,7 +7,6 @@
  * Bind values
  * Return rows and results
  */
-use Dotenv\Dotenv;
 class Database
 {
     private $dbh;
@@ -16,9 +15,6 @@ class Database
 
     public function __construct()
     {
-        $dotenv=Dotenv::createImmutable(DOCROOT);
-        $dotenv->load();
-        // Set DSN
         $dsn = 'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME'];
         $options = array(
             PDO::ATTR_PERSISTENT => true,

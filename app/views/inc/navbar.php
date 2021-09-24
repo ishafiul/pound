@@ -2,8 +2,8 @@
         <div class="header_top">
             <div class="col-sm-9 h_menu4">
                 <ul class="megamenu skyblue">
-                    <li class="active grid"><a class="color8" href="index.html">New</a></li>
                     <?php
+                    $helper = new HelperFunction();
                     foreach ($data['primary_cat'] as $primary){
                     ?>
                     <li><a class="color1" href="#"><?php echo $primary->name?></a><div class="megapanel">
@@ -28,7 +28,8 @@
 
                                             }
                                             if($i>1){
-                                                $mid = calculate_median($count);
+
+                                                $mid = $helper->calculate_median($count);
                                                 for($i=0;$i<$mid;$i++){
                                                     ?>
                                                     <li><a href="<?php echo URLROOT; ?>/browse/category/<?php echo $count[$i]['id']?>"><?php  echo $count[$i]['name'];?></a></li>
@@ -66,7 +67,7 @@
                                                 }
 
                                             }
-                                            $mid = calculate_median($count);
+                                            $mid = $helper->calculate_median($count);
                                             if($i>1){
                                             for($i=3;$i<$icount;$i++){
                                                 ?>
@@ -100,7 +101,6 @@
                     <?php
                     }
                     ?>
-                    <li><a class="color4" href="404.html">Accessories</a></li>
                     <li><a class="color6" href="<?php echo URLROOT; ?>/pages/contact">Conact</a></li>
                 </ul>
             </div>
@@ -112,9 +112,9 @@
                         if (isset($_SESSION['user_id'])){
                         ?>
                             <li>
-                                <?php
-                                echo 'Hello, '.$_SESSION['user_name'];
-                                ?>
+                                <a href="<?php echo URLROOT; ?>/profile"><i class="far fa-user"></i> <?php
+                                    echo $_SESSION['user_name'];
+                                    ?></a>
                                 <a href="<?php echo URLROOT; ?>/login/logout">Logout</a>
                             </li>
                         <?php
@@ -134,14 +134,16 @@
         <div class="header_bootm">
             <div class="col-sm-4 span_1">
                 <div class="logo">
-                    <a href="<?php echo URLROOT; ?>/index"><img src="<?php echo URLROOT.'/public/img/'.$data['info'][0]->logo; ?>" alt=""/></a>
+                    <a  href="<?php echo URLROOT; ?>/index"><img class="gg" src="<?php echo URLROOT.'/public/img/'.$data['info'][0]->logo; ?>" alt="<?php echo $data['info'][0]->title?>" /></a>
                 </div>
             </div>
             <div class="col-sm-8 row_2">
                 <div class="header_bottom_right">
                     <div class="search">
-                        <input type="text" value="Your email address" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Your email address';}">
-                        <input type="submit" value="">
+                        <form action="<?php echo URLROOT; ?>/search" method="get">
+                            <input type="text" name="q" placeholder="Search here...">
+                            <input type="submit" value="">
+                        </form>
                     </div>
                     <ul class="bag">
                         <a href="<?php echo URLROOT; ?>/cart"><i class="bag_left"> </i></a>

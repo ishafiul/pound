@@ -2,10 +2,14 @@
 if (!isset($_SESSION['user_name_admin'])){
     redirect('admins/login');
 }
+$helpers = new HelperFunction();
 require_once 'inc/header.php';
 ?>
 
     <span class="text-success"><?php echo $data['product_succ'];?></span>
+<?php
+reloadflash('product_succ');
+?>
     <div class="row">
         <div class="col-md-6">
             <form action="<?php echo URLROOT; ?>/admins/products" method="post" enctype="multipart/form-data">
@@ -270,7 +274,7 @@ require_once 'inc/header.php';
                     </table>
                     <hr>
                     <?php
-                    pagination($data['total_pages'],$data['pageno']);
+                    $helpers->pagination($data['total_pages'],$data['pageno']);
                     ?>
                 </div>
             </div>

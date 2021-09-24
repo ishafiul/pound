@@ -200,7 +200,8 @@ require APPROOT . '/views/inc/navbar.php';
                                     $get.='?perpage='.$_GET['perpage'].'&sort='.$_GET['sort'].'&price='.$_GET['price'];
                                     //echo $get;
                                 }
-                                paginationuser($data['total_pages'],$data['pageno'],$get);
+
+                                $helper->paginationuser($data['total_pages'],$data['pageno'],$get);
                                 ?>
                                 <div class="clearfix"></div>
                             </div>

@@ -378,4 +378,18 @@ class Products
             return $results;
         }
     }
+    public function getSearchResult($keyword){
+        $this->db->query("SELECT products.*, categorys.name AS cat_name,brands.name AS brand_name,image.img as product_base_img FROM products JOIN categorys ON products.category = categorys.id JOIN brands ON products.brand = brands.id JOIN image ON products.id = image.product_id 
+                            where products.product_name LIKE '$keyword%' 
+                               or products.product_name LIKE '%$keyword%'
+                                or products.product_name LIKE '%$keyword'
+
+                            GROUP BY products.id");
+        $results = $this->db->resultSet();
+        if ($results) {
+            return $results;
+        } else {
+            return $results;
+        }
+    }
 }

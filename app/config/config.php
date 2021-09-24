@@ -1,5 +1,4 @@
 <?php
-
 // App Root
 define('APPROOT', dirname(dirname(__FILE__)));
 $f =APPROOT;
@@ -12,10 +11,10 @@ define('SITENAME', 'SITE NAME');
 // App Version
 define('APPVERSION', '1.0.0');
 
-//composer autoload
-require_once APPROOT.'/helpers/vendor/autoload.php';
+
+use Dotenv\Dotenv,Omnipay\Omnipay;
+
 //dont env config
-use Dotenv\Dotenv;
 $dotenv=Dotenv::createImmutable(DOCROOT);//DOCROOT = your env file link
 $dotenv->load();
 
@@ -24,7 +23,7 @@ $dotenv->load();
  *
  * make $gateway variable global for functions
  * */
-use Omnipay\Omnipay;
+
 $gateway = Omnipay::create('PayPal_Rest');
 $gateway->setClientId($_ENV['PAYPAL_CLIENT_ID']);
 $gateway->setSecret($_ENV['PAYPAL_CLIENT_SECRET']);

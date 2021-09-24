@@ -1,12 +1,9 @@
 <?php
 
-use Dotenv\Dotenv;
 class Admins extends Controller
 {
     public function __construct()
     {
-        $dotenv=Dotenv::createImmutable(DOCROOT);
-        $dotenv->load();
         $this->payModel = $this->model('Payment');
         $this->adminModel = $this->model('Admin');
         $this->sliderModel = $this->model('Slider');
@@ -150,6 +147,7 @@ class Admins extends Controller
                 'featur2_err' => '',
                 'logo_ok' => '',
                 'logo_err' => '',
+                'infoUpdate_success' => '',
                 'imgName' => $_FILES['sliderImg']['name'],
                 'page_title' => 'Settings',
                 'description' => 'All post here ',
@@ -174,10 +172,13 @@ class Admins extends Controller
                 $unique_image = substr(md5(time()), 0, 10) . '.' . $ext;
                 $uploaded_image = DOCROOT . "/public/img/slider/" . $unique_image;
                 move_uploaded_file($file_temp, $uploaded_image);
-                $loggedInUser = $this->sliderModel->addSlider($unique_image);
-                if ($loggedInUser) {
-                    redirect('admins/settings?slide_success=Slide Uploaded Successfully');
+                $slider_upload = $this->sliderModel->addSlider($unique_image);
+                if ($slider_upload) {
+                    reloadflash('slider_success', 'Slide Uploaded Successfully','Admins/settings');
+
+
                 }
+                $this->view('admin/site_settings', $data);
             }
             $this->view('admin/site_settings', $data);
         }
@@ -196,6 +197,7 @@ class Admins extends Controller
                 'slider_err' => '',
                 'slide_success' => '',
                 'logo_err' => '',
+                'infoUpdate_success' => '',
                 'page_title' => 'Settings',
                 'slider' => $sliders,
                 'info' => $info
@@ -203,7 +205,7 @@ class Admins extends Controller
             unlink(DOCROOT . "/public/img/slider/" . $img);
             $ress = $this->sliderModel->deleteSlide($id);
             if ($ress) {
-                redirect('admins/settings?slide_success=Slider Deleted Successfully');
+                reloadflash('slider_success', 'Slider Deleted Successfully','Admins/settings');
             }
         }
 
@@ -221,6 +223,7 @@ class Admins extends Controller
                 'logo_err' => '',
                 'slider_err' => '',
                 'slide_success' => '',
+                'infoUpdate_success' => '',
                 'slider_err_edit' => '',
                 'slider' => $sliders,
                 'page_title' => 'Settings',
@@ -250,8 +253,7 @@ class Admins extends Controller
                     if (file_exists($oldImg)) {
                         unlink($oldImg);
                     }
-                    redirect('admins/settings?slide_success=Slide Edited Successfully');
-                    //$data['slide_success'] = 'Slider Edited Successfully. Please Reload';
+                    reloadflash('slider_success', 'Slide Edited Successfully','Admins/settings');
                 }
 
             }
@@ -268,6 +270,7 @@ class Admins extends Controller
                 'slider_err' => '',
                 'logo_err' => '',
                 'logo_ok' => '',
+                'infoUpdate_success' => '',
                 'featur1_ok' => '',
                 'featur1_err' => '',
                 'featur2_ok' => '',
@@ -299,9 +302,7 @@ class Admins extends Controller
 
                         unlink($oldImg);
                     }
-                    //print_r($info);
-                    //redirect('admins/settings?slide_success=Slide Edited Successfully');
-                    $data['logo_ok'] = 'Logo Uploaded Successfully. Please Reload';
+                    reloadflash('logo_success', 'Logo Edited Successfully','Admins/settings');
                 }
             }
             $this->view('admin/site_settings', $data);
@@ -348,9 +349,7 @@ class Admins extends Controller
 
                         unlink($oldImg);
                     }
-                    //print_r($info);
-                    //redirect('admins/settings?slide_success=Slide Edited Successfully');
-                    $data['featur1_ok'] = 'Image Uploaded Successfully. Please Reload';
+                    reloadflash('featur1_success', 'Image Uploaded Successfully.','Admins/settings');
                 }
             }
             $this->view('admin/site_settings', $data);
@@ -367,6 +366,7 @@ class Admins extends Controller
                 'featur1_ok' => '',
                 'featur1_err' => '',
                 'featur2_ok' => '',
+                'infoUpdate_success'=>'',
                 'featur2_err' => '',
                 'info' => $info
             ];
@@ -395,9 +395,7 @@ class Admins extends Controller
 
                         unlink($oldImg);
                     }
-                    //print_r($info);
-                    //redirect('admins/settings?slide_success=Slide Edited Successfully');
-                    $data['featur2_ok'] = 'Logo Uploaded Successfully. Please Reload';
+                    reloadflash('featur2_success', 'Image Uploaded Successfully.','Admins/settings');
                 }
             }
             $this->view('admin/site_settings', $data);
@@ -406,32 +404,31 @@ class Admins extends Controller
         if (isset($_POST['infoAdd'])) {
 
             $data = [
+                'imgName' => '',
+                'logo_ok' => '',
+                'logo_err' => '',
+                'featur1_ok' => '',
+                'featur1_err' => '',
+                'featur2_ok' => '',
+                'featur2_err' => '',
+                'slider_err' => '',
+                'slide_success' => '',
+                'infoUpdate_success' => '',
+                'page_title' => 'Settings',
+                'slider' => $sliders,
+                'info' => $info,
                 'title' => $_POST['title'],
                 'details' => $_POST['details'],
                 'fb' => $_POST['fb'],
                 'tw' => $_POST['tw'],
-                'ig' => $_POST['ig']
+                'ig' => $_POST['ig'],
+                'main_phone' => $_POST['main_phone'],
             ];
             $infoUpdate = $this->siteInfoModel->infoUpdate($data);
             if ($infoUpdate) {
-                $data = [
-                    'imgName' => '',
-                    'logo_ok' => '',
-                    'logo_err' => '',
-                    'featur1_ok' => '',
-                    'featur1_err' => '',
-                    'featur2_ok' => '',
-                    'featur2_err' => '',
-                    'slider_err' => '',
-                    'infoUpdate_success' => 'Info Updated Successfully. Please Reload The Page',
-                    'slide_success' => '',
-                    'page_title' => 'Settings',
-                    'slider' => $sliders,
-                    'info' => $info,
-                ];
-                $this->view('admin/site_settings', $data);
+                reloadflash('info_success', 'Info Updated Successfully.','Admins/settings');
             }
-
+            $this->view('admin/site_settings', $data);
         } else {
             $data = [
                 'imgName' => '',
@@ -475,8 +472,9 @@ class Admins extends Controller
             if (empty($data['categoryPName'])) {
                 $data['cataddP_err'] = 'Give Category A Name';
             } else {
-                $data['cataddP_Succ'] = 'Primary Category Added Successfully';
+                //$data['cataddP_Succ'] = 'Primary Category Added Successfully';
                 $this->adminCategoryModel->addPrimaryCategory($data);
+                reloadflash('categoryP_success', 'Primary Category Added Successfully.','admins/categories');
             }
             $this->view('admin/category', $data);
         }
@@ -500,8 +498,10 @@ class Admins extends Controller
             if (empty($data['editPrimaryCatName'])) {
                 $data['cataddP_err'] = 'Give Category A Name For Edit';
             } else {
-                $data['cataddP_Succ'] = 'Primary Category Edited Successfully';
+                //$data['cataddP_Succ'] = 'Primary Category Edited Successfully';
                 $this->adminCategoryModel->editPrimaryCategory($data);
+                reloadflash('categoryP_success', 'Primary Category Edited Successfully.','admins/categories');
+
             }
             $this->view('admin/category', $data);
         }
@@ -522,8 +522,10 @@ class Admins extends Controller
                 'editPrimaryCatId' => $_POST['id']
             ];
 
-            $data['cataddP_Succ'] = 'Primary Category Deleted Successfully';
+            //$data['cataddP_Succ'] = 'Primary Category Deleted Successfully';
             $this->adminCategoryModel->deletePrimaryCategory($data);
+            reloadflash('categoryP_success', 'Primary Category Deleted Successfully.','admins/categories');
+
 
             $this->view('admin/category', $data);
         }
@@ -541,7 +543,6 @@ class Admins extends Controller
                 'cataddC_err' => '',
                 'cataddC_select_err' => '',
                 'cataddC_Succ' => '',
-                'categoryCName' => '',
                 'primaryCategory' => $category,
                 'childCategory' => $categoryChild,
 
@@ -553,8 +554,9 @@ class Admins extends Controller
                 $data['cataddC_err'] = 'Give Category A Name';
             }
             if (empty($data['cataddC_err']) && empty($data['cataddC_select_err'])) {
-                $data['cataddC_Succ'] = 'Primary Category Added Successfully';
+                //$data['cataddC_Succ'] = 'Primary Category Added Successfully';
                 $this->adminCategoryModel->addChildCategory($data);
+                reloadflash('categoryC_success', 'Child Category Added Successfully.','admins/categories');
             }
             $this->view('admin/category', $data);
         }
@@ -583,8 +585,9 @@ class Admins extends Controller
                 $data['cataddC_err'] = 'Give Category A Name';
             }
             if (empty($data['cataddC_err']) && empty($data['cataddC_select_err'])) {
-                $data['cataddC_Succ'] = 'Primary Category Edited Successfully';
+                //$data['cataddC_Succ'] = 'Primary Category Edited Successfully';
                 $this->adminCategoryModel->editChildCategory($data);
+                reloadflash('categoryC_success', 'Child Category Edited Successfully.','admins/categories');
             }
 
             /*else{
@@ -610,8 +613,10 @@ class Admins extends Controller
                 'editChildCatId' => $_POST['id']
             ];
 
-            $data['cataddC_Succ'] = 'Child Category Deleted Successfully';
+            //$data['cataddC_Succ'] = 'Child Category Deleted Successfully';
+
             $this->adminCategoryModel->deleteChildCategory($data);
+            reloadflash('categoryC_success', 'Child Category Deleted Successfully.','admins/categories');
 
             $this->view('admin/category', $data);
         } else {
@@ -658,8 +663,9 @@ class Admins extends Controller
                 $data['brand_Name_err'] = 'Give a Brand name';
             }
             if (empty($data['cat_select_err']) && empty($data['brand_Name_err'])) {
-                $data['brand_succ'] = 'Brand Added Successfully';
+                //$data['brand_succ'] = 'Brand Added Successfully';
                 $this->brandsModel->addBrands($data);
+                reloadflash('brand_succ', 'Brand Added Successfully.','admins/brands');
             }
             $this->view('admin/brands', $data);
         }
@@ -677,8 +683,9 @@ class Admins extends Controller
                 'id' => $_POST['id'],
             ];
 
-            $data['brand_succ'] = 'Brand Deleted Successfully';
+            //$data['brand_succ'] = 'Brand Deleted Successfully';
             $this->brandsModel->deleteBrand($data);
+            reloadflash('brand_succ', 'Brand Deleted Successfully.','admins/brands');
 
             $this->view('admin/brands', $data);
         }
@@ -704,8 +711,9 @@ class Admins extends Controller
                 $data['brand_Name_err'] = 'Give a Brand name';
             }
             if (empty($data['cat_select_err']) && empty($data['brand_Name_err'])) {
-                $data['brand_succ'] = 'Brand Added Successfully';
+                //$data['brand_succ'] = 'Brand Added Successfully';
                 $this->brandsModel->editBrands($data);
+                reloadflash('brand_succ', 'Brand Edited Successfully.','admins/brands');
             }
 
             $this->view('admin/brands', $data);
@@ -957,7 +965,8 @@ class Admins extends Controller
                     $this->imgModel->addImg($file,$id);
 
                 }
-                $data['product_succ'] = "Product Added Successfully. please reload the page";
+                //$data['product_succ'] = "Product Added Successfully. please reload the page";
+                reloadflash('product_succ', 'Product Added Successfully.','admins/products');
             }
 
         }
@@ -999,7 +1008,8 @@ class Admins extends Controller
                 unlink($path);
             }
             $this->productModel->deleteproduct($data['id']);
-            $data['product_succ'] = "Deleted Successfully please reload the page";
+            //$data['product_succ'] = "Deleted Successfully please reload the page";
+            reloadflash('product_succ', 'Product Deleted Successfully.','admins/products');
             $this->view('admin/product', $data);
         }
         if (isset($_POST['addTopF'])){
@@ -1033,7 +1043,8 @@ class Admins extends Controller
                 'product_succ'=>'',
                 'id'=>$_POST['id']
             ];
-            $data['product_succ'] = "Added Top Featured Successfully please reload the page";
+            //$data['product_succ'] = "Added Top Featured Successfully please reload the page";
+            reloadflash('product_succ', 'Added Top Featured Successfully.','admins/products');
             $this->productModel->addTopF($data['id']);
         }
         if (isset($_POST['removeTopF'])){
@@ -1067,7 +1078,8 @@ class Admins extends Controller
                 'product_succ'=>'',
                 'id'=>$_POST['id']
             ];
-            $data['product_succ'] = "Removed Top Featured Successfully please reload the page";
+            //$data['product_succ'] = "Removed Top Featured Successfully please reload the page";
+            reloadflash('product_succ', 'Removed Top Featured Successfully.','admins/products');
             $this->productModel->removeTopF($data['id']);
         }
         if (isset($_POST['addBottomF'])){
@@ -1101,7 +1113,8 @@ class Admins extends Controller
                 'product_succ'=>'',
                 'id'=>$_POST['id']
             ];
-            $data['product_succ'] = "Added Bottom Featured Successfully please reload the page";
+            //$data['product_succ'] = "Added Bottom Featured Successfully please reload the page";
+            reloadflash('product_succ', 'Added Bottom Featured Successfully.','admins/products');
             $this->productModel->addBottomF($data['id']);
         }
         if (isset($_POST['removeBottomF'])){
@@ -1135,7 +1148,8 @@ class Admins extends Controller
                 'product_succ'=>'',
                 'id'=>$_POST['id']
             ];
-            $data['product_succ'] = "Removed Bottom Featured Successfully please reload the page";
+            //$data['product_succ'] = "Removed Bottom Featured Successfully please reload the page";
+            reloadflash('product_succ', 'Removed Bottom Featured Successfully.','admins/products');
             $this->productModel->removeBottomF($data['id']);
         }
         if (isset($_POST['addToHome'])){
@@ -1169,7 +1183,8 @@ class Admins extends Controller
                 'product_succ'=>'',
                 'id'=>$_POST['id']
             ];
-            $data['product_succ'] = "Added to Home Successfully please reload the page";
+            //$data['product_succ'] = "Added to Home Successfully please reload the page";
+            reloadflash('product_succ', 'Added to Home Successfully.','admins/products');
             $this->productModel->addToHome($data['id']);
         }
         if (isset($_POST['removeFromHome'])){
@@ -1203,7 +1218,8 @@ class Admins extends Controller
                 'product_succ'=>'',
                 'id'=>$_POST['id']
             ];
-            $data['product_succ'] = "Removed From Home Successfully please reload the page";
+            //$data['product_succ'] = "Removed From Home Successfully please reload the page";
+            reloadflash('product_succ', 'Removed From Home Successfully.','admins/products');
             $this->productModel->removeFromHome($data['id']);
         }
         $this->view('admin/product', $data);
@@ -1248,7 +1264,8 @@ class Admins extends Controller
                 }
             }
             $this->productModel->updateProduct($data);
-            $data['product_succ'] = "Product Edited Successfully. please reload the page";
+            //$data['product_succ'] = "Product Edited Successfully. please reload the page";
+            reloadflash('product_succ', 'Product Edited Successfully.','admins/editproduct/'.$Url);
             $this->view('admin/editproduct', $data);
         }
         if (isset($_POST['deleteImg'])){
@@ -1269,7 +1286,8 @@ class Admins extends Controller
                 unlink($path);
             }
             $this->imgModel->deleteImg($data['id']);
-            $data['product_succ'] = "Product Edited Successfully. please reload the page";
+            //$data['product_succ'] = "Product Edited Successfully. please reload the page";
+            reloadflash('product_succ', 'Image Deleted Successfully.','admins/editproduct/'.$Url);
             $this->view('admin/editproduct', $data);
         }
         if (isset($_POST['editImg'])){
@@ -1290,7 +1308,7 @@ class Admins extends Controller
             $file_size = $_FILES['img']['size'];
             $img = $_POST['imgName'];
             $permited = array('jpg', 'jpeg', 'png', 'gif');
-            $data['product_succ'] = $img;
+            //$data['product_succ'] = $img;
             $div = explode('.', $file_name);
             $ext = strtolower(end($div));
             if (empty($_FILES['img']['name'])) {
@@ -1312,11 +1330,12 @@ class Admins extends Controller
                     }
                     $this->imgModel->editImg($unique_image,$id);
                     //print_r($info);
-                    redirect('admins/products');
+                    //redirect('admins/products');
                     //$data['product_succ'] = "Image Edited Successfully. Please Reload";
+                reloadflash('product_succ', 'Image Edited Successfully.','admins/editproduct/'.$Url);
 
             }
-            //$this->view('admin/editproduct', $data);
+            $this->view('admin/editproduct', $data);
 
         }
         else{
@@ -1339,5 +1358,30 @@ class Admins extends Controller
             'message'=>''
         ];
         $this->view('admin/hidden/index');
+    }
+    public function music()
+    {// function name will define what will be the page url that user will input
+        $info = $this->siteInfoModel->getSiteInfo();
+        $pageno = '';
+        if (isset($_GET['pageno'])) {
+            $pageno = $_GET['pageno'];
+        } else {
+            $pageno = 1;
+        }
+        $no_of_records_per_page = 25;
+        $offset = ($pageno - 1) * $no_of_records_per_page;
+        $total_rows = $this->payModel->getTotalRow();
+        $total_pages = ceil($total_rows[0]->total_row / $no_of_records_per_page);
+        $payment = $this->payModel->getPagination($offset, $no_of_records_per_page);
+        $data = [
+            'page_title' => 'Admin Dash',
+            'description' => '',
+            'info' => $info,
+            'total_pages' =>$total_pages,
+            'payment'=>$payment,
+            'pageno'=>$pageno,
+        ];
+
+        $this->view('admin/music', $data); // which view will load
     }
 }

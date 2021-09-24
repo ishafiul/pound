@@ -84,67 +84,22 @@
 
       $this->view('pages/about', $data);
     }
-      public function contact(){
-          $info = $this->siteInfoModel->getSiteInfo();
-          $office = $this->officeModel->getAllOfficeInfo();
-          $primary_cat = $this->categoryModel->getPrimaryCategory();
-          $child = $this->categoryModel->getChildCategory();
-          $brand = $this->brandModel->getBrands();
-          $data = [
-              'page_title' => 'Contacts Us',
-              'description' => '',
-              'info'=>$info,
-              'office'=>$office,
-              'primary_cat'=>$primary_cat,
-              'child'=>$child,
-              'brands'=>$brand
-          ];
+    public function contact(){
+      $info = $this->siteInfoModel->getSiteInfo();
+      $office = $this->officeModel->getAllOfficeInfo();
+      $primary_cat = $this->categoryModel->getPrimaryCategory();
+      $child = $this->categoryModel->getChildCategory();
+      $brand = $this->brandModel->getBrands();
+      $data = [
+          'page_title' => 'Contacts Us',
+          'description' => '',
+          'info'=>$info,
+          'office'=>$office,
+          'primary_cat'=>$primary_cat,
+          'child'=>$child,
+          'brands'=>$brand
+      ];
 
-          $this->view('pages/contact', $data);
-      }
-      public function error(){
-          $info = $this->siteInfoModel->getSiteInfo();
-          $data = [
-              'page_title' => 'Contacts Us',
-              'description' => '',
-              'info'=>$info
-          ];
-
-          $this->view('pages/404', $data);
-      }
-      public function login(){
-          $info = $this->siteInfoModel->getSiteInfo();
-          $office = $this->officeModel->getAllOfficeInfo();
-          $primary_cat = $this->categoryModel->getPrimaryCategory();
-          $child = $this->categoryModel->getChildCategory();
-          $brand = $this->brandModel->getBrands();
-          $data = [
-              'page_title' => 'Contacts Us',
-              'description' => '',
-              'info'=>$info,
-              'office'=>$office,
-              'primary_cat'=>$primary_cat,
-              'child'=>$child,
-              'brands'=>$brand
-          ];
-          $this->view('pages/login', $data);
-      }
-      public function signup(){
-          $info = $this->siteInfoModel->getSiteInfo();
-          $office = $this->officeModel->getAllOfficeInfo();
-          $primary_cat = $this->categoryModel->getPrimaryCategory();
-          $child = $this->categoryModel->getChildCategory();
-          $brand = $this->brandModel->getBrands();
-          $data = [
-              'page_title' => 'Contacts Us',
-              'description' => '',
-              'info'=>$info,
-              'office'=>$office,
-              'primary_cat'=>$primary_cat,
-              'child'=>$child,
-              'brands'=>$brand
-          ];
-          $this->view('pages/signup', $data);
-      }
-
+      $this->view('pages/contact', $data);
+  }
   }

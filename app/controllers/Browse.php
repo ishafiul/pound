@@ -3,6 +3,7 @@ class Browse extends Controller
 {
     public function __construct()
     {
+
         //your models gose here . example : $this->ModelName = $this->model('model_class_name');
         $this->sliderModel = $this->model('Slider');
         $this->siteInfoModel = $this->model('SiteInfo');

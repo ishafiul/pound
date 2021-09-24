@@ -3,9 +3,11 @@ if (!isset($_SESSION['user_id_admin'])){
     redirect('admins/login');
 }
 require_once 'inc/header.php';
-//print_r($data['payment']);
+
 ?>
 <h1>All Sell Info</h1>
+<?php flash('register_success');
+?>
     <table class="table">
         <thead>
         <tr>
@@ -50,7 +52,8 @@ require_once 'inc/header.php';
         </tbody>
     </table>
 <?php
-pagination($data['total_pages'],$data['pageno']);
+$helpers = new HelperFunction();
+$helpers->pagination($data['total_pages'],$data['pageno']);
 ?>
 <?php
 require_once 'inc/footer.php';

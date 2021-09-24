@@ -57,31 +57,28 @@
     <!-- start span_of_2 -->
     <div class="span_of_2">
         <div class="span1_of_2">
-            <h5>need help? <a href="#">contact us <span> &gt;</span> </a> </h5>
-            <p>(or) Call us: +22-34-2458793</p>
+            <h5>need help? <a href="<?php echo URLROOT; ?>/pages/contact">contact us <span> &gt;</span> </a> </h5>
+            <p>(or) Call us: <?php echo $data['info'][0]->main_phone?></p>
         </div>
         <div class="span1_of_2">
             <h5>follow us </h5>
-            <div class="social-icons">
-                <ul>
-                    <li><a href="#" target="_blank"></a></li>
-                    <li><a href="#" target="_blank"></a></li>
-                    <li><a href="#" target="_blank"></a></li>
-                    <li><a href="#" target="_blank"></a></li>
-                    <li class="last2"><a href="#" target="_blank"></a></li>
-                </ul>
+            <div class="row" >
+                <div class="col-md-4"><a href="<?php echo $data['info'][0]->fb?>" style="color: #858796;font-size: 2.5em;"><i class="fab fa-facebook"></i></a></div>
+                <div class="col-md-4"><a href="<?php echo $data['info'][0]->tw?>" style="color: #858796;font-size: 2.5em;"><i class="fab fa-twitter"></i></a></div>
+                <div class="col-md-4"><a href="<?php echo $data['info'][0]->ig?>" style="color: #858796;font-size: 2.5em;"><i class="fab fa-instagram-square"></i></a></div>
             </div>
         </div>
         <div class="clearfix"></div>
     </div>
     <div class="copy">
-        <p>© 2015 All Rights Reseverd by <?php echo $data['info'][0]->title?> </p>
+        <p>© <?php echo date("Y"); ?> All Rights Reseverd by <?php echo $data['info'][0]->title?> </p>
     </div>
 </div>
 </div>
 </div>
 <link href="<?php echo URLROOT; ?>/public/css/flexslider.css" rel='stylesheet' type='text/css' />
 <script defer src="<?php echo URLROOT; ?>/public/js/jquery.flexslider.js"></script>
+<script defer src="<?php echo URLROOT; ?>/public/js/main.js"></script>
 <script type="text/javascript">
     $(function(){
         SyntaxHighlighter.all();

@@ -13,6 +13,7 @@
 
     <!-- Custom fonts for this template-->
     <link href="<?php echo URLROOT; ?>/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -35,7 +36,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo URLROOT; ?>/admins/index">
 
             <div class="sidebar-brand-text mx-3"><?php echo $data['info'][0]->title;?></div>
         </a>
@@ -53,23 +54,28 @@
         <!-- Nav Item - Charts -->
         <li class="nav-item">
             <a class="nav-link" href="<?php echo URLROOT; ?>/admins/settings">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>settings</span></a>
+                <i class="fas fa-cogs"></i>
+                <span>Settings</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?php echo URLROOT; ?>/admins/office">
+                <i class="fas fa-building"></i>
+                <span>Office</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="<?php echo URLROOT; ?>/admins/Categories">
-                <i class="fas fa-fw fa-chart-area"></i>
+                <i class="fas fa-list"></i>
                 <span>Categories</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="<?php echo URLROOT; ?>/admins/brands">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>brands</span></a>
+                <i class="fas fa-tags"></i>
+                <span>Brands</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="<?php echo URLROOT; ?>/admins/products">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>products</span></a>
+                <i class="fas fa-box-open"></i>
+                <span>Products</span></a>
         </li>
 
         <!-- Divider -->

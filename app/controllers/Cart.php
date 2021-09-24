@@ -15,6 +15,7 @@ class Cart extends Controller
         $this->officeModel = $this->model('Office');
         $this->productModel = $this->model('Products');
         $this->imgModel = $this->model('Image');
+        $this->paymentModel = $this->model('Payment');
 
 
     }
@@ -27,6 +28,7 @@ class Cart extends Controller
         if (isset($_SESSION['cart'])){
             $cart_p =$_SESSION['cart'];
         }
+        //echo $this->paymentModel->lastId();
         $data =[
             'description' => '',
             'page_title'=>'About Us',
@@ -35,7 +37,8 @@ class Cart extends Controller
             'child'=>$child,
             'brands'=>$brand,
             'cartArr'=>$cart_p,
-            'cart'=>''
+            'cart'=>'',
+            'cartmusic'=>'',
         ];
         if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])){
             $ids ='';
@@ -48,19 +51,45 @@ class Cart extends Controller
                     $ids .=','.$_SESSION['cart'][$i-1];
                 }
             }
+            //print_r($_SESSION);
             $cartProduct = $this->productModel->getCartProduct($ids);
             $data['cart'] = $cartProduct;
-            if (isset($_POST['deleteCart'])){
-                $val = $_POST['id'];
-                $arryPosition = array_search($val,$_SESSION['cart'],true);
-                $_SESSION['cart'] = array_diff($_SESSION['cart'], array($val));
-                 $_SESSION['cart'] = array_values(array_filter($_SESSION['cart']));
-                 //print_r($_SESSION['cart']);
-                //unset($_SESSION['cart'][1]);
-                //reset($_SESSION['cart']);
-                redirect('cart');
-            }
         }
+        //echo count($_SESSION['cartmusic']);
+        /*if (isset($_SESSION['cartmusic']) && !empty($_SESSION['cartmusic'])){
+            $mids ='';
+            $mcount = count($_SESSION['cartmusic']);
+            for ($i = 1; $i <= $mcount; $i++) {
+                if ($i == 1) {
+                    $mids .= $_SESSION['cartmusic'][0];
+                } else {
+                    $mids .= ',' . $_SESSION['cartmusic'][$i - 1];
+                }
+            }
+
+            $cartmusic = $this->musicModel->getCartMusic($mids);
+            $data['cartmusic'] = $cartmusic;
+        }*/
+        if (isset($_POST['deleteCart'])){
+            $val = $_POST['id'];
+            $arryPosition = array_search($val,$_SESSION['cart'],true);
+            $_SESSION['cart'] = array_diff($_SESSION['cart'], array($val));
+            $_SESSION['cart'] = array_values(array_filter($_SESSION['cart']));
+            //print_r($_SESSION['cart']);
+            //unset($_SESSION['cart'][1]);
+            //reset($_SESSION['cart']);
+            redirect('cart');
+        }
+       /* if (isset($_POST['deleteCartmusic'])){
+            $val = $_POST['id'];
+            $arryPosition = array_search($val,$_SESSION['cartmusic'],true);
+            $_SESSION['cartmusic'] = array_diff($_SESSION['cartmusic'], array($val));
+            $_SESSION['cartmusic'] = array_values(array_filter($_SESSION['cartmusic']));
+            //print_r($_SESSION['cart']);
+            //unset($_SESSION['cart'][1]);
+            //reset($_SESSION['cart']);
+            redirect('cart');
+        }*/
 
         $this->view('cart/index',$data);
     }
@@ -85,9 +114,10 @@ class Cart extends Controller
             'brands' => $brand,
             'cartArr' => $cart_p,
             'cart' => '',
+            'cartmusic'=>'',
             'user_info'=>''
         ];
-        if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+        if (isset($_SESSION['cart']) ) {
             $ids = '';
             $count = count($_SESSION['cart']);
             for ($i = 1; $i <= $count; $i++) {
@@ -101,6 +131,20 @@ class Cart extends Controller
             $data['cart'] = $cartProduct;
 
         }
+       /* if (isset($_SESSION['cartmusic']) && !empty($_SESSION['cartmusic'])){
+            $mids ='';
+            $mcount = count($_SESSION['cartmusic']);
+            for ($i = 1; $i <= $mcount; $i++) {
+                if ($i == 1) {
+                    $mids .= $_SESSION['cartmusic'][0];
+                } else {
+                    $mids .= ',' . $_SESSION['cartmusic'][$i - 1];
+                }
+            }
+            $cartmusic = $this->musicModel->getCartMusic($mids);
+            $data['cartmusic'] = $cartmusic;
+
+        }*/
         if (isset($_SESSION['user_email'])){
             $user = $this->userModel->findUserByEmail($_SESSION['user_email']);
             $data['user_info'] =$user;
@@ -117,7 +161,12 @@ class Cart extends Controller
                 $data['user_id'] = $_POST['user_id'];
             }
             $data['product_ids']=$_POST['p_ids'];
-
+            /*$data['musicids'] ='';
+            if (isset($_POST['m_ids'])) {
+                $data['musicids'] = $_POST['m_ids'];
+            }*/
+            $this->paymentModel->pendingpayment($data);
+            $id = $this->paymentModel->lastId();
             try {
                 $response = $gateway->purchase(array(
                     'amount' => $_POST['amount'],
@@ -125,7 +174,7 @@ class Cart extends Controller
                         array(
                             'name' => '',
                             'price' => $_POST['amount'],
-                            'description' => '',
+                            'description' => $id,
                             'quantity' => 1
                         ),
                     ),
@@ -177,19 +226,24 @@ class Cart extends Controller
                 $arr_body = $response->getData();
 
                 $payment_id = $arr_body['id'];
-                $payer_id = $arr_body['payer']['payer_info']['payer_id'];
+                $payer_id= $arr_body['payer']['payer_info']['payer_id'];
                 $payer_email = $arr_body['payer']['payer_info']['email'];
                 $amount = $arr_body['transactions'][0]['amount']['total'];
                 $currency = $_ENV['PAYPAL_CURRENCY'];
                 $payment_status = $arr_body['state'];
-                //$id = $arr_body['transactions'][0]['item_list']['items'][0]['description'];
+                $id = $arr_body['transactions'][0]['item_list']['items'][0]['description'];
 
-                // Insert transaction data into the database
-                /* $isPaymentExist = $db->query("SELECT * FROM payments WHERE payment_id = '".$payment_id."'");*/
+                $payment =[
+                    'payment_id'=>$payment_id,
+                    'payer_id'=>$payer_id,
+                    'payer_email'=>$payer_email,
+                    'amount'=>$amount,
+                    'currency'=>$currency,
+                    'payment_status'=>$payment_status,
+                    'id'=>$id
 
-                /*if($isPaymentExist->num_rows == 0) {
-                    $insert = $db->query("UPDATE payments SET payment_id='$payment_id', payer_id='$payer_id', payer_email='$payer_email', amount='$amount', currency='$currency', payment_status='$payment_status' where id='$id'");
-                }*/
+                ];
+                $this->paymentModel->paymentsuccess($payment);
                 if (isset($_SESSION['cart'])) {
                     unset($_SESSION['cart']);
                 }
