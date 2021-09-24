@@ -12,7 +12,7 @@ another change for path is
 ###### RewriteBase /pound/public
 you can find it from 
 ###### app->public->.htaceess
-if you want to live you site then keep only /public
+if you want to live your site then keep only /public
 
 
 ## .ENv
